@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="{% url 'index' %}">
+        {% load static %}
+            <img src="{% static "doortodoor/logo.jpg" %}" class="rounded" width="40">
+   </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Ajouter Livraison</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Modifier Livraison</a>
+            </li>            
+            <li class="nav-item">
+                <a class="nav-link" href="#">Etat des Retours</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'about' %}">A Propos</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Tableau De Bord</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>

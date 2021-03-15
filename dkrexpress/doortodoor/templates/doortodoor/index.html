@@ -1,0 +1,36 @@
+{% extends 'doortodoor/base.html' %}
+
+{% block content %}
+
+<div class="container mb-5">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 col-sm-12 offset-md-1 p-4 text-center">
+            <h1>Service de Livraison Door To Door</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-1">
+        <div class="card col-md-5 col-sm-12 offset-md-1 p-4 text-center">
+            <h2>Ajouter une livraison!</h2>
+            <a href="#" class="btn btn-outline-dark">Ajouter!</a>
+        </div>
+    </div>
+</div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-2">
+            {% load static %}
+            <img src="{% static "doortodoor/logo.jpg" %}" class="rounded" width="250" height="190">
+        </div>
+        <div class="col-md-10">
+            <div class="card-body">
+                <h6 class="card-title">DKR EXPRESS / DOOR TO DOOR SERVICES</h6>
+                <p class="card-text"><small class="text-muted">Societe Unipersonnelle a Responsabilite Limitée au capital de 250 000 F CFA <br>
+                    Siege Social: Cité Libasse Niang, Sud Foire Villa 2298, Dakar, Senegal <br>
+                    RC SN-DKR-2019-B-36077</small></P>
+                
+              </div>
+        </div>
+    </div> 
+
+
+{% endblock content %}
