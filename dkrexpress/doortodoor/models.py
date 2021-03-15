@@ -14,7 +14,7 @@ STATUS_TYPES=(
 
 class Article(models.Model):
     libelle = models.CharField(max_length=100)
-    description =  models.TextField()
+    description =  models.TextField(null=True)
     prix_article = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     user = models.ManyToManyField(User)
     #Information du client

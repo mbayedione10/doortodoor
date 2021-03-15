@@ -23,6 +23,7 @@ from django.urls import path
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('doortodoor/', include('doortodoor.urls')),
+    path('accounts/', include('allauth.urls')),
 
 
 ]
