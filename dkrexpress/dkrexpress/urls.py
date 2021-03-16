@@ -19,8 +19,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
+from doortodoor.views import Index
 
 urlpatterns = [
+    path('', Index.as_view(), name = 'index'),
     url(r'^admin/', admin.site.urls),
     url('doortodoor/', include('doortodoor.urls')),
     path('accounts/', include('allauth.urls')),

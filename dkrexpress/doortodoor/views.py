@@ -24,7 +24,7 @@ class About(LoginRequiredMixin, UserPassesTestMixin, View):
         return self.request.user.groups.all()
 
 
-class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
+class AjouterArticle(LoginRequiredMixin,UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'doortodoor/ajouter.html')
@@ -73,6 +73,7 @@ class ConfirmationArticle(LoginRequiredMixin,UserPassesTestMixin,View):
             'adresse': article.adresse_client,
             'user': request.user,
         }
+
         return render(request, 'doortodoor/confirmation-article.html', context)
         
     def post(self, request, pk, *args, **kwargs):
@@ -82,4 +83,12 @@ class ConfirmationArticle(LoginRequiredMixin,UserPassesTestMixin,View):
         return self.request.user.groups.filter(name='Clients')
 
 
+class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'doortodoor/ajouter-livraison.html')
+    
 
+
+
+    def test_func(self):
+        return self.request.user.groups.all() #filter(name='')

@@ -1,0 +1,64 @@
+{% extends 'doortodoor/base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-5 ml-3">
+    <div class="col-md-3 col-sm-12 justify-content-center">
+        {% load static %}
+        <img src="{% static "doortodoor/logo.jpg" %}" class="rounded" width="300" height="250">
+    </div>
+    <div class="col-md-9 col-sm-12 mt-5">
+        <div class="card-body">
+            <h6 class="card-title">DKR EXPRESS / DOOR TO DOOR SERVICES</h6>
+            <p class="card-text"><small class="text-muted">Societe Unipersonnelle a Responsabilite Limitée au capital de 250 000 F CFA <br>
+                Siege Social: Cité Libasse Niang, Sud Foire Villa 2298, Dakar, Senegal <br>
+                RC SN-DKR-2019-B-36077</small></P>
+            
+          </div>
+    </div>
+</div> 
+<div class="container mb-5">
+    <div class="row justify-content-center mt-1">
+        <div class="col-md-12 col-sm-12 p-4">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group pt-3">
+                            <label for="name">Prix Livraison</label>
+                            <input required class="form-control" type="text" placeholder="Montant en CFA" name="prix_livraison"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#submitModal">
+                    Ajouter Livraison
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="submitModal" tabindex="-1" aria-labelledby="submitModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="submitModalLabel">Client Livré</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Confirmation de la livraison?</p>
+                          </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Retour</button>
+                        <button type="submit" class="btn btn-dark">Envoyer</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
