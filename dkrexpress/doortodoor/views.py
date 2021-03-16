@@ -6,7 +6,6 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.utils.timezone import datetime
 from django.core.mail import send_mail
 from doortodoor.models import *
-from doortodoor.serializers import *
 
 
 class Index(LoginRequiredMixin,UserPassesTestMixin, View):
