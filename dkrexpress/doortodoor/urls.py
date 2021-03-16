@@ -7,5 +7,7 @@ from doortodoor.views import *
 urlpatterns = [
     path('', Index.as_view(), name = 'index'),
     path('about/', About.as_view(), name = 'about'),
+    path('article/', AjouterLivraison.as_view(), name = 'ajouter'),
+    path('confirmation-article/<int:pk>', ConfirmationArticle.as_view(), name='confirmation-article')
 
 ]
