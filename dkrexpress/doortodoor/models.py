@@ -32,7 +32,7 @@ class Livraison(models.Model):
     user = models.ManyToManyField(User)
     statut = models.CharField(max_length=20, choices=STATUS_TYPES, blank = False, null=False,  default=EN_COURS)
     date_statut = models.DateTimeField(auto_now_add=True)
-    prix_livraison = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    prix_livraison = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
     
     def __str__(self):
         return f'Order: {self.date_statut.strftime("%b %d %Y %I:%M %p")}'

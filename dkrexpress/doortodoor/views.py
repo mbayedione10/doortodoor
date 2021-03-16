@@ -24,14 +24,14 @@ class About(LoginRequiredMixin, UserPassesTestMixin, View):
         return self.request.user.groups.all()
 
 
-class AjouterArticle(LoginRequiredMixin,UserPassesTestMixin, View):
+class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'doortodoor/ajouter.html')
 
     def post(self, request, *args, **kwargs):
         """
-        Formulaire qui permet d'ajouter des livraisons
+        Formulaire qui permet d'ajouter des livraisons par le client
         """ 
         libelle = request.POST.get('libelle')
         description = request.POST.get('description')
@@ -52,7 +52,15 @@ class AjouterArticle(LoginRequiredMixin,UserPassesTestMixin, View):
             adresse_client= adresse_client,
             contact_client= contact_client,
         )
+
         article.user.add(*list_id)
+        
+        list_id_article = []
+        list_id_article.append(article.pk)
+        livraison = Livraison.objects.create()
+        livraison.article.add(*list_id_article)
+        livraison.user.add(*list_id)
+
 
         context = {
                 'id': article.pk,
@@ -64,6 +72,10 @@ class AjouterArticle(LoginRequiredMixin,UserPassesTestMixin, View):
 
 
 class ConfirmationArticle(LoginRequiredMixin,UserPassesTestMixin,View):
+    """
+    Afficher un recap de la livraison ajoutté par le client
+    """
+
     def get(self, request, pk, *args, **kwargs):
         article = Article.objects.get(pk=pk)
         context = {
@@ -83,12 +95,22 @@ class ConfirmationArticle(LoginRequiredMixin,UserPassesTestMixin,View):
         return self.request.user.groups.filter(name='Clients')
 
 
-class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'doortodoor/ajouter-livraison.html')
+# class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
+#     """
+#     prendre l'id de la livraison ett modifier le prix
+#     changer status
+#     """
+
+#     def get(self, request, *args, **kwargs):
+#         return render(request, 'doortodoor/ajouter-livraison.html')
     
 
 
 
-    def test_func(self):
-        return self.request.user.groups.all() #filter(name='')
+#     def test_func(self):
+#         return self.request.user.groups.all() #filter(name='')
+
+
+class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get(self, request, *args, **kwargs):
+        pass
