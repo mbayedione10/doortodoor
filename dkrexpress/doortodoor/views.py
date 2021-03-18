@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.utils.timezone import datetime
 from django.core.mail import send_mail
 from doortodoor.models import *
+from django.utils.timezone import datetime
 
 
 class Index(LoginRequiredMixin,UserPassesTestMixin, View):
@@ -95,22 +96,47 @@ class ConfirmationArticle(LoginRequiredMixin,UserPassesTestMixin,View):
         return self.request.user.groups.filter(name='Clients')
 
 
-# class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
-#     """
-#     prendre l'id de la livraison ett modifier le prix
-#     changer status
-#     """
+class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
+    """
+    prendre l'id de la livraison ett modifier le prix
+    changer status
+    """
 
-#     def get(self, request, *args, **kwargs):
-#         return render(request, 'doortodoor/ajouter-livraison.html')
+    def get(self, request, *args, **kwargs):
+        return render(request, 'doortodoor/ajouter-livraison.html')
     
 
 
 
-#     def test_func(self):
-#         return self.request.user.groups.all() #filter(name='')
+    def test_func(self):
+        return self.request.user.groups.all() #filter(name='')
 
 
 class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
-    def get(self, request, *args, **kwargs):
-        pass
+    def get(self, request, *args, **kwargs): 
+        #get the current date
+        today = datetime.today()
+        livraison = Livraison.objects.all()
+            #created_on__year=today.year,created_on__month=today.month,created_on__day=today.day)
+        #Loop through the orders and add the price value and check if order is not shipped
+
+        unshipped_order = []
+        total_revenue = 0
+        for order in orders:
+            total_revenue += order.price
+            if not order.is_shipped:
+                unshipped_order.append(order)
+
+
+
+        #Pass total number orders and total revenue into template
+        context={
+            'orders': unshipped_order,
+            'total_revenue': total_revenue,
+            'total_orders': len(orders)
+        }
+
+        return render(request,'restaurant/dashboard.html', context)
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Staff') 
