@@ -10,6 +10,7 @@ urlpatterns = [
     path('article/', AjouterLivraison.as_view(), name = 'ajouter'),
     path('confirmation-article/<int:pk>', ConfirmationArticle.as_view(), name='confirmation-article'),
     # path('livraison/',ModifierLivraison.as_view(), name='ajout-livraison'),
+    path('dashboard/', Dashboard.as_view(), name = 'dashboard'),
     
 
 ]   
