@@ -18,6 +18,7 @@ class Index(LoginRequiredMixin,UserPassesTestMixin, View):
 
 
 class About(LoginRequiredMixin, UserPassesTestMixin, View):
+    
     def get(self, request, *args, **kwargs):
         return render(request, 'doortodoor/about.html')
     
@@ -33,6 +34,7 @@ class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
     def post(self, request, *args, **kwargs):
         """
         Formulaire qui permet d'ajouter des livraisons par le client
+        user autorisé: admin, client
         """ 
         libelle = request.POST.get('libelle')
         description = request.POST.get('description')
@@ -74,7 +76,8 @@ class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
 
 class ConfirmationArticle(LoginRequiredMixin,UserPassesTestMixin,View):
     """
-    Afficher un recap de la livraison ajoutté par le client
+    Afficher une recap de la livraison ajouté par le client
+    user autorisé: admin, client
     """
 
     def get(self, request, pk, *args, **kwargs):
@@ -98,15 +101,36 @@ class ConfirmationArticle(LoginRequiredMixin,UserPassesTestMixin,View):
 
 class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
     """
-    prendre l'id de la livraison ett modifier le prix
-    changer status
+    fonction qui permet de faire une livraison en ajoutant le prix 
+    prendre l'id de la livraison et modifier le prix
+    changer statut
+    ajouter celui qui a modifier la livraison
+    user autorisé: admin, livreur
     """
 
-    def get(self, request, *args, **kwargs):
-        return render(request, 'doortodoor/ajouter-livraison.html')
+    def get(self, request,pk, *args, **kwargs):
+        livraison = Livraison.objects.get(pk=pk)
+        context = {'id': livraison.pk}
+        # return render(request, 'doortodoor/livraison-details.html', context)
+        return render(request, 'doortodoor/ajouter-livraison.html', context)
     
+    
+    def post(self, request, pk, *args, **kwargs):
+        livraison = Livraison.objects.get(pk=pk)
+        livraison.prix_livraison = request.POST.get('prix_livraison')
+        livraison.statut = "livré"
+        user_id= request.user.id
+        list_id = []
+        list_id.append(user_id)
+        livraison.user.clear()
+        livraison.user.add(*list_id)
 
-
+        livraison.save()
+        
+        context = {
+                'id': livraison.pk,
+            }
+        return redirect('livraison-details', pk=livraison.pk)
 
     def test_func(self):
         return self.request.user.groups.all() #filter(name='')
@@ -118,6 +142,7 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
         parcourir toutes les livraisons ajouter les elements du tableau de bord
         Calculer montant total
         Nombre de livraison total
+        user autorisé: admin
         """
 
         #get the current date
@@ -150,8 +175,6 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
                 #Append ship data
                 ship['livraison_list'].append(ship_data)
             
-
-        print(ship['livraison_list'])
         #Ajouter les données dans context
         context={
             'livraison': ship['livraison_list'],
@@ -164,3 +187,94 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def test_func(self):
         return self.request.user.groups.all()    #filter(name='Staff') 
+
+
+
+class LivraisonDetails(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get(self, request, pk, *args, **kwargs):
+        livraison = Livraison.objects.get(pk=pk)
+        livraison_modified_by = [user.username for user in User.objects.filter(livraison=livraison)]
+
+        liv = {
+            'livraison_list': []
+        }
+
+        ship_data ={
+
+                'livraison_modified_by': livraison_modified_by[0],
+                'statut': livraison.statut,
+                'date_statut': livraison.date_statut,
+                'livraison_id': livraison.pk
+                }
+
+        #Append ship data
+        liv['livraison_list'].append(ship_data)
+        print(liv['livraison_list'])
+
+        context={
+            'livraison': liv['livraison_list']
+        }
+        return render(request, 'doortodoor/livraison-details.html', context)
+    
+    
+    def test_func(self):
+        return self.request.user.groups.all() #filter(name='Staff').exists()
+
+
+class ModifierStatut(LoginRequiredMixin, UserPassesTestMixin, View):
+    """
+    Modifier lee statut de la livraison
+    user autorisé: admin, livreur
+    """
+    def get(self, request, pk, *args, **kwargs):
+        livraison = Livraison.objects.get(pk=pk)
+        livraison_modified_by = [user.username for user in User.objects.filter(livraison=livraison)]
+
+        liv = {
+            'livraison_list': []
+        }
+
+        ship_data ={
+                'livraison_modified_by': livraison_modified_by[0],
+                'statut': livraison.statut,
+                'date_statut': livraison.date_statut,
+                'livraison_id': livraison.pk
+                }
+
+        #Append ship data
+        liv['livraison_list'].append(ship_data)
+
+        context={
+            'livraison': liv['livraison_list']
+        }
+
+        return render(request, 'doortodoor/modifier-statut.html', context)
+    
+    def post(self, request, pk, *args, **kwargs):
+        livraison = Livraison.objects.get(pk=pk)
+        user_id= request.user.id
+        list_id = []
+        list_id.append(user_id)
+        livraison.user.clear()
+        livraison.user.add(*list_id)
+
+        if livraison.statut == "livré":
+            livraison.statut = "retour"
+            livraison.prix_livraison=0
+        elif livraison.statut == "en cours":
+            livraison.statut = "retour"
+        else:
+            livraison.statut = "en cours"
+        
+        livraison.save()
+
+        context = {
+                'id': livraison.pk,
+            }
+        return redirect('dashboard')
+
+        
+    def test_func(self):
+        return self.request.user.groups.all() #filter(name='Staff').exists()
+
+

@@ -19,40 +19,56 @@
                 <thead>
                     <tr>
                         
-                        <th scope="col">Livraison ID</th>
+                        <th scope="col">ID</th>
                         <th scope="col">Ajouté le</th>
                         <th scope="col">Ajouté par</th>
                         <th scope="col">Article</th>
                         <th scope="col">Nom client</th>
                         <th scope="col">Prix Livraison</th>
                         <th scope="col">Statut</th>
-                        <th scope="col">Derniere Modification</th>
-                        <th scope="col">Modifier</th>
+                        <th scope="col"></th>
+                        <!--th scope="col">Modifier</th-->
                     </tr>
                 </thead>
-                <!--tbody>
+                <tbody>
                     {% for ship in livraison %}
                     <tr>
                         <th scope="row">{{ ship.livraison_id }}</th>
-                        <td>{{ ship.created_on }}</td>
+                        <td>{{ ship.date_ajout }}</td>
+                        <td>{{ ship.article_added_by }}</td>
+                        <td>{{ ship.libelle_article }}</td>
+                        <td>{{ ship.nom_client }}</td>
                         <td>{{ ship.prix_livraison }}</td>
-                        <td>{{ ship.statut }}</td>
-                        <td>{{ article_item.libelle }}</td>
-                        <td>{{ article_added_by }}</td>
-                        <td>{{ livraison_modified_by }}</td>
-                        <td>{{ order.state }}</td>
-                        <td>{{ order.zip_code }}</td-->
-                        <!--td>
-                            {% if order.is_paid %}
+                        <td>
+                            {% if ship.statut == "livré"%}
                             <i style="color: green;" class="fas fa-check"></i>
-                            {% else %}
+                            {% elif ship.statut == "en cours" %}
+                            <i style="color: rgb(14, 13, 12);" class="fas fa-ellipsis-h"></i>
+                            {% elif ship.statut == "retour" %}
                             <i style="color: red;" class="fas fa-times"></i>
                             {% endif %}
                         </td>
-                        <td><a href="#"><i class="far fa-edit"></i></a></td>
+                        <td>
+                            {% if ship.statut == "livré" %}
+                            <a href="{% url 'modifier-livraison' ship.livraison_id %}"><i class="fas fa-exchange-alt"></i></a>
+                            {% elif ship.statut == "en cours" %}
+                            <a href="{% url 'modifier-livraison' ship.livraison_id %}"><i class="fas fa-exchange-alt"></i></a>
+                            {% elif ship.statut == "retour" %}
+                            <a href="{% url 'modifier-livraison' ship.livraison_id %}"><i class="fas fa-exchange-alt"></i></a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if ship.statut == "livré" %}
+                            <a href="{% url 'livraison-details' ship.livraison_id %}"><i class="far fa-edit"></i></a>
+                            {% elif ship.statut == "en cours" %}
+                            <a href="{% url 'ajout-livraison' ship.livraison_id %}"><i class="far fa-edit"></i></a>
+                            {% elif ship.statut == "retour" %}
+                            <a href="#"><i class="far fa-edit"></i></a>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
-                </tbody-->
+                </tbody>
             </table>
         </div>
     </div>

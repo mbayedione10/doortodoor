@@ -9,8 +9,10 @@ urlpatterns = [
     path('about/', About.as_view(), name = 'about'),
     path('article/', AjouterLivraison.as_view(), name = 'ajouter'),
     path('confirmation-article/<int:pk>', ConfirmationArticle.as_view(), name='confirmation-article'),
-    # path('livraison/',ModifierLivraison.as_view(), name='ajout-livraison'),
+    path('livraison/<int:pk>', ModifierLivraison.as_view(), name='ajout-livraison'),
     path('dashboard/', Dashboard.as_view(), name = 'dashboard'),
+    path('details/<int:pk>', LivraisonDetails.as_view(), name='livraison-details'),
+    path('modifier/<int:pk>', ModifierStatut.as_view(), name='modifier-livraison'),
     
 
 ]   

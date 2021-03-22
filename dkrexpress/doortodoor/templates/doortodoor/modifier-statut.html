@@ -1,0 +1,64 @@
+{% extends 'doortodoor/base.html' %}
+
+{% block content %}
+<div class="container">
+    {% for liv in livraison %}
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-sm-12 text-center mt-3">
+            <h1>Livraison ID: {{ liv.livraison_id }}</h1>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-sm-12">
+            <h3 class="pt-3">Information de la Livraison: </h3>
+            <p<span style="font-weight: 400;">Statut Actuel: </span>
+            {% if liv.statut == "livré"%}
+            <i style="color: green;" class="fas fa-check mt-2"> Livré</i>
+            {% elif liv.statut == "en cours" %}
+            <i style="color: rgb(14, 13, 12);" class="fas fa-ellipsis-h"> En cours</i>
+            {% elif liv.statut == "retour" %}
+            <i style="color: red;" class="fas fa-times"> Retour</i>
+            {% endif %}
+        </p>
+            <p><span style="font-weight: 400;">Date modification:</span>  {{ liv.date_statut }}</p>
+            <p><span style="font-weight: 400;">Modifié par:</span>  {{ liv.livraison_modified_by }}</p>
+        </div>
+
+        <div class="col-md-6 col-sm-12">
+            <h3 class="pt-3">Statut Information: </h3>
+            <p class="mt-3">
+                <form method="POST">
+                    {% csrf_token %}
+                {% if liv.statut == "livré"%}
+                    <button type="submit" class="btn btn-outline-danger" name="shipped">Retour</button>
+                {% elif liv.statut == "en cours"%}
+                    <a href="{% url 'ajout-livraison' liv.livraison_id %}" class="btn btn-outline-dark">Ajouter!</a>
+                    <button type="submit" class="btn btn-outline-danger" name="loading">Retour</button>
+                {% elif liv.statut == "retour" %}
+                <button type="submit" class="btn btn-outline-success" name="retour">En Cours</button>
+                </form>
+            {% endif %}
+    {% endfor %}
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-3">
+        <div class="card col-md-12">
+            <div class="col-md-2">
+                {% load static %}
+                <img src="{% static "doortodoor/logo.jpg" %}" class="rounded" width="250" height="190">
+                
+            </div>
+            <div class="col-md-6">
+                <div class="card-body">
+                <h6 class="card-title">DKR EXPRESS / DOOR TO DOOR SERVICES</h6>
+                <p class="card-text"><small class="text-muted">Societe Unipersonnelle a Responsabilite Limitée au capital de 250 000 F CFA <br>
+                    Siege Social: Cité Libasse Niang, Sud Foire Villa 2298, Dakar, Senegal <br>
+                    RC SN-DKR-2019-B-36077</small></P>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+{% endblock content %}
