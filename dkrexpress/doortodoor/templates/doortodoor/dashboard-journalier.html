@@ -13,31 +13,8 @@
             <h1 class="text-center pt" style="color: red;">{{ total_livraison }}</h1>
         </div>
     </div> 
-    <div class="row  mt-5">
-        <div class="col-md-3 col-sm-6">
-            <form method="GET" action="{% url 'dashboard-search' %}">
-                <div class="md-form mt-0 active-cyan-2">
-                    <input type="date" name="q" class="form-control" aria-label="Search" value="{{ request.GET.q }}">
-                    <button type="submit" class="btn btn-dark" data-toggle="modal">
-                        Rechercher
-                    </button>
-                    <a href="{% url 'dashboard' %}">Retour</a>
-                </div>
-            </form>
-            <form method="GET" action="#">
-                <div class="md-form mt-0 active-cyan-2">
-                    <input type="text" name="q" class="form-control" aria-label="Search" value="{{ request.GET.q }}">
-                    <button type="submit" class="btn btn-dark" data-toggle="modal">
-                        Rechercher
-                    </button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-
     <div class="row justify-content-center">
-        <div class="col-md-12 mt-3">
+        <div class="col-md-12 mt-5">
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
@@ -58,7 +35,7 @@
                     <tr>
                         <th scope="row">{{ ship.livraison_id }}</th>
                         <td>{{ ship.date_ajout }}</td>
-                        <td>{{ ship.article_added_by  }}</td>
+                        <td>{{ ship.article_added_by }}</td>
                         <td>{{ ship.libelle_article }}</td>
                         <td>{{ ship.nom_client }}</td>
                         <td>{{ ship.prix_livraison }}</td>
@@ -96,4 +73,5 @@
         </div>
     </div>
 </div>
+
 {% endblock content %}

@@ -7,6 +7,7 @@ from django.utils.timezone import datetime
 from django.core.mail import send_mail
 from doortodoor.models import *
 from django.utils.timezone import datetime
+from django.db.models import Q
 
 
 class Index(LoginRequiredMixin,UserPassesTestMixin, View):
@@ -136,60 +137,6 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
         return self.request.user.groups.all() #filter(name='')
 
 
-class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
-    def get(self, request, *args, **kwargs):
-        """
-        parcourir toutes les livraisons ajouter les elements du tableau de bord
-        Calculer montant total
-        Nombre de livraison total
-        user autorisé: admin
-        """
-
-        #get the current date
-        today = datetime.today()
-        livraison = Livraison.objects.all()
-        ship = {
-            'livraison_list': []
-        }
-
-        montant_total = 0
-        for liv in livraison:
-            montant_total +=liv.prix_livraison
-            livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
-            article_item = Article.objects.filter(article = liv)
-
-            for article in article_item:
-                article_added_by = [user.username for user in User.objects.filter(article=article)]
-                ship_data ={
-                            'nom_client': article.nom_client,
-                            'libelle_article': article.libelle,
-                            'adresse_client': article.adresse_client,
-                            'date_ajout': article.date_ajout,
-                            'article_added_by': article_added_by[0],
-                            'livraison_modified_by': livraison_modified_by[0],
-                            'statut': liv.statut,
-                            'date_statut': liv.date_statut,
-                            'prix_livraison': liv.prix_livraison,
-                            'livraison_id': liv.pk
-                            }
-                #Append ship data
-                ship['livraison_list'].append(ship_data)
-            
-        #Ajouter les données dans context
-        context={
-            'livraison': ship['livraison_list'],
-            'montant_total': montant_total,
-            'total_livraison': len(livraison)
-        }
-        
-
-        return render(request,'doortodoor/dashboard.html', context)
-
-    def test_func(self):
-        return self.request.user.groups.all()    #filter(name='Staff') 
-
-
-
 class LivraisonDetails(LoginRequiredMixin, UserPassesTestMixin, View):
     def get(self, request, pk, *args, **kwargs):
         livraison = Livraison.objects.get(pk=pk)
@@ -278,3 +225,167 @@ class ModifierStatut(LoginRequiredMixin, UserPassesTestMixin, View):
         return self.request.user.groups.all() #filter(name='Staff').exists()
 
 
+
+class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get(self, request, *args, **kwargs):
+        """
+        parcourir toutes les livraisons ajouter les elements du tableau de bord
+        Calculer montant total
+        Nombre de livraison total
+        user autorisé: admin client
+        """
+        livraison = Livraison.objects.all()
+        ship = {
+            'livraison_list': []
+        }
+        
+        montant_total = 0
+        for liv in livraison:
+            montant_total +=liv.prix_livraison
+            livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
+            article_item = Article.objects.filter(article = liv)
+
+            for article in article_item:
+                article_added_by = [user.username for user in User.objects.filter(article=article)]
+                ship_data ={
+                            'nom_client': article.nom_client,
+                            'libelle_article': article.libelle,
+                            'adresse_client': article.adresse_client,
+                            'date_ajout': article.date_ajout,
+                            'article_added_by': article_added_by[0],
+                            'livraison_modified_by': livraison_modified_by[0],
+                            'statut': liv.statut,
+                            'date_statut': liv.date_statut,
+                            'prix_livraison': liv.prix_livraison,
+                            'livraison_id': liv.pk
+                            }
+                #Append ship data
+                ship['livraison_list'].append(ship_data)
+            
+        #Ajouter les données dans context
+        context={
+            'livraison': ship['livraison_list'],
+            'montant_total': montant_total,
+            'total_livraison': len(livraison)
+        }
+
+        return render(request,'doortodoor/dashboard.html', context)
+
+    def test_func(self):
+        return self.request.user.groups.all()    #filter(name='Staff') 
+
+class DashboardJournalier(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get(self, request, *args, **kwargs):
+        """
+        parcourir toutes les livraisons du jour ajouter les elements du tableau de bord
+        Calculer montant total
+        Nombre de livraison total
+        user autorisé: connected
+        """
+
+        #get the current date
+        today = datetime.today()
+        livraison = Livraison.objects.filter(
+            created_on__year=today.year,created_on__month=today.month,created_on__day=today.day)
+        ship = {
+            'livraison_list': []
+        }
+
+        montant_total = 0
+        for liv in livraison:
+            montant_total +=liv.prix_livraison
+            livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
+            article_item = Article.objects.filter(article = liv)
+
+            for article in article_item:
+                article_added_by = [user.username for user in User.objects.filter(article=article)]
+                ship_data ={
+                            'nom_client': article.nom_client,
+                            'libelle_article': article.libelle,
+                            'adresse_client': article.adresse_client,
+                            'date_ajout': article.date_ajout,
+                            'article_added_by': article_added_by[0],
+                            'livraison_modified_by': livraison_modified_by[0],
+                            'statut': liv.statut,
+                            'date_statut': liv.date_statut,
+                            'prix_livraison': liv.prix_livraison,
+                            'livraison_id': liv.pk
+                            }
+                #Append ship data
+                ship['livraison_list'].append(ship_data)
+            
+        #Ajouter les données dans context
+        context={
+            'livraison': ship['livraison_list'],
+            'montant_total': montant_total,
+            'total_livraison': len(livraison)
+        }
+        
+
+        return render(request,'doortodoor/dashboard-journalier.html', context)
+
+    def test_func(self):
+        return self.request.user.groups.all()    #filter(name='Staff') 
+
+class DashboardSearch(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get(self, request, *args, **kwargs):
+        query = self.request.GET.get("q")
+
+        livraison = Livraison.objects.filter(
+                Q(created_on__icontains=query)
+                #Q(price__icontains=query) |
+                #Q(description__icontains=query)
+            )
+
+
+
+        ship = {
+            'livraison_list': []
+        }
+
+        montant_total = 0
+        for liv in livraison:
+            montant_total +=liv.prix_livraison
+            livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
+            article_item = Article.objects.filter(article = liv)
+
+            for article in article_item:
+                article_added_by = [user.username for user in User.objects.filter(article=article)]
+                ship_data ={
+                            'nom_client': article.nom_client,
+                            'libelle_article': article.libelle,
+                            'adresse_client': article.adresse_client,
+                            'date_ajout': article.date_ajout,
+                            'article_added_by': article_added_by[0],
+                            'livraison_modified_by': livraison_modified_by[0],
+                            'statut': liv.statut,
+                            'date_statut': liv.date_statut,
+                            'prix_livraison': liv.prix_livraison,
+                            'livraison_id': liv.pk
+                            }
+                #Append ship data
+                ship['livraison_list'].append(ship_data)
+            
+        #Ajouter les données dans context
+        context={
+            'livraison': ship['livraison_list'],
+            'montant_total': montant_total,
+            'total_livraison': len(livraison)
+        }
+        
+
+        return render(request,'doortodoor/dashboard.html', context)
+    def test_func(self):
+        return self.request.user.groups.all() #filter(name='Staff').exists()
+
+# class DashboardByClient(LoginRequiredMixin, UserPassesTestMixin, View):
+#     def get(self, request, *args, **kwargs):
+#         users = User.objects.all()
+#         print(users)
+#         query = self.request.GET.get("q")
+#         return render(request,'doortodoor/dashboard.html')
+
+#     def test_func(self):
+#         return self.request.user.groups.all() #filter(name='Staff').exists()
+        
+        
