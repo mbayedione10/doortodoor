@@ -10,12 +10,10 @@ urlpatterns = [
     path('article/', AjouterLivraison.as_view(), name = 'ajouter'),
     path('confirmation-article/<int:pk>', ConfirmationArticle.as_view(), name='confirmation-article'),
     path('livraison/<int:pk>', ModifierLivraison.as_view(), name='ajout-livraison'),
-    path('dashboard/search', DashboardSearch.as_view(), name = 'dashboard-search'),
     path('dashboard/', Dashboard.as_view(), name = 'dashboard'),
-    #path('dashbord/search',DashboardByClient.as_view(), name = 'client-dashboard'),
+    path('dashboard/search', DashboardSearch.as_view(), name = 'dashboard-search'),
     path('details/<int:pk>', LivraisonDetails.as_view(), name='livraison-details'),
     path('modifier/<int:pk>', ModifierStatut.as_view(), name='modifier-livraison'),
-    path('dailydashbord/', DashboardJournalier.as_view(), name='daily-dashboard'),
  
     
 
