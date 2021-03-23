@@ -13,7 +13,7 @@
             <h1 class="text-center pt" style="color: red;">{{ total_livraison }}</h1>
         </div>
     </div> 
-    <div class="row  mt-5">
+    <div class="row  mt-3 justify-content-end">
         <div class="col-md-3 col-sm-6">
             <form method="GET" action="{% url 'dashboard-search' %}">
                 <div class="md-form mt-0 active-cyan-2">
@@ -27,8 +27,8 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col-md-12 mt-3">
-            <table class="table table-hover table-striped" id="printableTable">
+        <div class="col-md-12">
+            <table class="table table-hover table-striped">
                 <thead>
                     <tr>
                         
@@ -83,12 +83,25 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <div><buttontype="submit" class="btn btn-dark"  onClick="window.print()">Imprimer
-            </button>
         </div>
-        </div>
-
+        <button type="submit" class="btn btn-dark"  onClick="window.print()">Imprimer
+        </button>
     </div>
 </div>
+<div class="row justify-content-center mt-5 ml-3">
+    <div class="col-md-3 col-sm-12 justify-content-center">
+        {% load static %}
+        <img src="{% static "doortodoor/logo.jpg" %}" class="rounded" width="300" height="250">
+    </div>
+    <div class="col-md-9 col-sm-12 mt-5">
+        <div class="card-body">
+            <h6 class="card-title">DKR EXPRESS / DOOR TO DOOR SERVICES</h6>
+            <p class="card-text"><small class="text-muted">Societe Unipersonnelle a Responsabilite Limitée au capital de 250 000 F CFA <br>
+                Siege Social: Cité Libasse Niang, Sud Foire Villa 2298, Dakar, Senegal <br>
+                RC SN-DKR-2019-B-36077</small></P>
+            
+          </div>
+    </div>
+</div> 
 
 {% endblock content %}
