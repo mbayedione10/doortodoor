@@ -232,8 +232,9 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
         parcourir toutes les livraisons ajouter les elements du tableau de bord
         Calculer montant total
         Nombre de livraison total
-        user autorisé: admin client
+        user autorisé: admin client livreur
         """
+        today = datetime.today()
         livraison = Livraison.objects.all()
         ship = {
             'livraison_list': []
@@ -289,7 +290,9 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
                     ship['livraison_list'].append(ship_data)                    
                     nombre_livraison += 1
         elif request.user.groups.filter(name='Livreurs'):
-            livraison = Livraison.objects.filter(user = user_id)
+            livraison = Livraison.objects.filter(created_on__year=today.year,
+            created_on__month=today.month,created_on__day=today.day)
+            print(livraison)
             for liv in livraison:
                 montant_total +=liv.prix_livraison
                 livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
@@ -311,6 +314,7 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
                     #Append ship data
                     ship['livraison_list'].append(ship_data)
             nombre_livraison = len(livraison)
+            
         #Ajouter les données dans context
         context={
             'livraison': ship['livraison_list'],
@@ -384,31 +388,6 @@ class DashboardSearch(LoginRequiredMixin, UserPassesTestMixin, View):
                         #Append ship data
                     ship['livraison_list'].append(ship_data)                    
                     nombre_livraison += 1
-        elif request.user.groups.filter(name='Livreurs'):
-            livraison = Livraison.objects.filter(user = user_id, created_on__year=query_date_filter.year,
-           created_on__month=query_date_filter.month,created_on__day=query_date_filter.day)
-            for liv in livraison:
-                montant_total +=liv.prix_livraison
-                livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
-                article_item = Article.objects.filter(article = liv)
-                for article in article_item:
-                    article_added_by = [user.username for user in User.objects.filter(article=article)]
-                    ship_data ={
-                                'nom_client': article.nom_client,
-                                'libelle_article': article.libelle,
-                                'adresse_client': article.adresse_client,
-                                'date_ajout': article.date_ajout,
-                                'article_added_by': article_added_by[0],
-                                'livraison_modified_by': livraison_modified_by[0],
-                                'statut': liv.statut,
-                                'date_statut': liv.date_statut,
-                                'prix_livraison': liv.prix_livraison,
-                                'livraison_id': liv.pk
-                                }
-                    #Append ship data
-                    ship['livraison_list'].append(ship_data)
-            nombre_livraison = len(livraison)
-            
         #Ajouter les données dans context
         context={
             'livraison': ship['livraison_list'],
