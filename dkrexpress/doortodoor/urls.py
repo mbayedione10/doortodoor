@@ -11,6 +11,7 @@ urlpatterns = [
     path('confirmation-article/<int:pk>', ConfirmationArticle.as_view(), name='confirmation-article'),
     path('livraison/<int:pk>', ModifierLivraison.as_view(), name='ajout-livraison'),
     path('dashboard/', Dashboard.as_view(), name = 'dashboard'),
+    path('liste-retour/', ListeRetour.as_view(), name='liste-retour'),
     path('dashboard/search', DashboardSearch.as_view(), name = 'dashboard-search'),
     path('details/<int:pk>', LivraisonDetails.as_view(), name='livraison-details'),
     path('modifier/<int:pk>', ModifierStatut.as_view(), name='modifier-livraison'),

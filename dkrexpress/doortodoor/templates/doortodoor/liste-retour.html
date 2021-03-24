@@ -1,0 +1,72 @@
+{% extends 'doortodoor/base.html' %}
+ 
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-3">
+        <div class="card col-md-5 mr-3">
+            <h4 class="text-center pt-2">Nombre de Livraison</h4>
+            <h1 class="text-center pt" style="color: red;">{{ total_livraison }}</h1>
+        </div>
+    </div> 
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-12">
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        
+                        <th scope="col">ID</th>
+                        <th scope="col">Ajouté le</th>
+                        <th scope="col">Ajouté par</th>
+                        <th scope="col">Article</th>
+                        <th scope="col">Nom client</th>
+                        <th scope="col">Prix Livraison</th>
+                        <th scope="col">Statut</th>
+                        <th scope="col">Modifié par</th>
+                        <!--th scope="col">Modifier</th-->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ship in livraison %}
+                    <tr>
+                        <th scope="row">{{ ship.livraison_id }}</th>
+                        <td>{{ ship.date_ajout }}</td>
+                        <td>{{ ship.article_added_by  }}</td>
+                        <td>{{ ship.libelle_article }}</td>
+                        <td>{{ ship.nom_client }}</td>
+                        <td>{{ ship.prix_livraison }}</td>
+                        <td>
+                            {% if ship.statut == "livré"%}
+                            <i style="color: green;" class="fas fa-check"></i>
+                            {% elif ship.statut == "en cours" %}
+                            <i style="color: rgb(14, 13, 12);" class="fas fa-ellipsis-h"></i>
+                            {% elif ship.statut == "retour" %}
+                            <i style="color: red;" class="fas fa-times"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ ship.livraison_modified_by }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <button type="submit" class="btn btn-dark"  onClick="window.print()">Imprimer
+        </button>
+    </div>
+</div>
+<div class="row justify-content-center mt-5 ml-3">
+    <div class="col-md-3 col-sm-12 justify-content-center">
+        {% load static %}
+        <img src="{% static "doortodoor/logo.jpg" %}" class="rounded" width="300" height="250">
+    </div>
+    <div class="col-md-9 col-sm-12 mt-5">
+        <div class="card-body">
+            <h6 class="card-title">DKR EXPRESS / DOOR TO DOOR SERVICES</h6>
+            <p class="card-text"><small class="text-muted">Societe Unipersonnelle a Responsabilite Limitée au capital de 250 000 F CFA <br>
+                Siege Social: Cité Libasse Niang, Sud Foire Villa 2298, Dakar, Senegal <br>
+                RC SN-DKR-2019-B-36077</small></P>
+            
+          </div>
+    </div>
+</div> 
+
+{% endblock content %}
