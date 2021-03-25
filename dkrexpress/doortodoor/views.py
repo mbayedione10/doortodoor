@@ -84,31 +84,6 @@ class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
         return self.request.user.groups.all()
 
 
-class ConfirmationArticle(LoginRequiredMixin,UserPassesTestMixin,View):
-    """
-    Afficher une recap de la livraison ajouté par le client
-    user autorisé: admin, client
-    """
-
-    def get(self, request, pk, *args, **kwargs):
-        article = Article.objects.get(pk=pk)
-        context = {
-            'pk': article.pk,
-            'nom_client': article.nom_client,
-            'contact_client': article.contact_client,
-            'adresse': article.adresse_client,
-            'user': request.user,
-        }
-
-        return render(request, 'doortodoor/confirmation-article.html', context)
-        
-    def post(self, request, pk, *args, **kwargs):
-        print(request.body)
-
-    def test_func(self):
-        return self.request.user.groups.all()
-
-
 class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
     """
     fonction qui permet de faire une livraison en ajoutant le prix 
