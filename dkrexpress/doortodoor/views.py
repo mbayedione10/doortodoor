@@ -123,20 +123,20 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
                 article_added_by = [user.email for user in User.objects.filter(article=article)]
                 libelle = article.libelle
 
-        body = (f'Bonjour {client[0]},\n'
-        f'Votre article a été livré avec succés par {request.user.username} \n'
-        f'Montant Livraison: {livraison.prix_livraison}\n'
-        'Merci\n'
-        'Door To Door Team!'
-        )
-        email_from=settings.EMAIL_HOST_USER
-        send_mail(
-            f'Livraison {libelle}',
-            body,
-            email_from,
-            article_added_by,
-            fail_silently=False
-        )
+        # body = (f'Bonjour {client[0]},\n'
+        # f'Votre article a été livré avec succés par {request.user.username} \n'
+        # f'Montant Livraison: {livraison.prix_livraison}\n'
+        # 'Merci\n'
+        # 'Door To Door Team!'
+        # )
+        # email_from=settings.EMAIL_HOST_USER
+        # send_mail(
+        #     f'Livraison {libelle}',
+        #     body,
+        #     email_from,
+        #     article_added_by,
+        #     fail_silently=False
+        # )
         context = {
                 'id': livraison.pk,
             }
