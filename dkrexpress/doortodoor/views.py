@@ -70,7 +70,15 @@ class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
         context = {
                 'id': article.pk,
             }
-        return redirect('confirmation-article', pk=article.pk)
+        """
+        si l'utilisateur save add another-> ajouter
+        si l'utilisateur save -> dashboard
+        """
+        if "another" in request.POST:
+            return redirect('ajouter')
+            
+        return redirect('dashboard')
+
 
     def test_func(self):
         return self.request.user.groups.all()
