@@ -5,6 +5,8 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.utils.timezone import datetime
 from doortodoor.models import *
 from django.db.models import Q
+from django.conf import settings
+from django.core.mail import send_mail
 
 
 class Index(LoginRequiredMixin,UserPassesTestMixin, View):
@@ -97,7 +99,6 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
         if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Livreurs'):
             livraison = Livraison.objects.get(pk=pk)
             context = {'id': livraison.pk}
-            # return render(request, 'doortodoor/livraison-details.html', context)
             return render(request, 'doortodoor/ajouter-livraison.html', context)
         else:
             return redirect('dashboard')
@@ -107,13 +108,35 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
         livraison.prix_livraison = request.POST.get('prix_livraison')
         livraison.statut = "livré"
         user_id= request.user.id
+        client = [user.username for user in User.objects.filter(livraison=livraison)]
         list_id = []
         list_id.append(user_id)
         livraison.user.clear()
         livraison.user.add(*list_id)
 
         livraison.save()
-        
+        #After everything is done, send confirmation mail to the user
+        article_item = Article.objects.filter(article = livraison)
+        article_added_by=[]
+        libelle=''
+        for article in article_item:
+                article_added_by = [user.email for user in User.objects.filter(article=article)]
+                libelle = article.libelle
+
+        body = (f'Bonjour {client[0]},\n'
+        f'Votre article a été livré avec succés par {request.user.username} \n'
+        f'Montant Livraison: {livraison.prix_livraison}\n'
+        'Merci\n'
+        'Door To Door Team!'
+        )
+        email_from=settings.EMAIL_HOST_USER
+        send_mail(
+            f'Livraison {libelle}',
+            body,
+            email_from,
+            article_added_by,
+            fail_silently=False
+        )
         context = {
                 'id': livraison.pk,
             }
