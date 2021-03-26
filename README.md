@@ -15,7 +15,7 @@ There will be three sides to this application and users must be connected to use
 
 The environement setup process depends on your system. Do some research to find out how to do it on OS. For MAC you can use the following commands
 pip install virtualenv
-
+```
 Create virtual environment
 python -m virtualenv myenv
 
