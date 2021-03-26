@@ -1,8 +1,8 @@
-# doortodoor
+====================
+Door To Door
+====================
 
-# README #
-
-This is the DoorToDoor App
+This is DoorToDoor App
 we will build Delivery Application using Python 3 and Django
 There will be three sides to this application and users must be connected to use it:
 1- Customer can add product and view his Dashboard
@@ -14,18 +14,19 @@ There will be three sides to this application and users must be connected to use
 ####1. Create a python environment####
 
 The environement setup process depends on your system. Do some research to find out how to do it on OS. For MAC you can use the following commands
+pip install virtualenv
 
-#!bash
 Create virtual environment
-virtualenv myenv
+python -m virtualenv myenv
 
 Active this env
-source myenv/bin/activate
+Mac: source myenv/bin/activate
+Windows: myeenv\Scripts\activate.bat
+
 ```
 
 ####2. Clone the repo and move to the project folder####
 ```
-#!bash
 git clone *repo_url*
 cd dkrexpress
 
@@ -33,15 +34,13 @@ cd dkrexpress
 
 ####3. Install required python packages####
 ```
-#!python
+
 pip install -r requirements.txt
 
 ```
 
 ####4. Apply database migrations####
 ```
-#!bash
-
 python manage.py makemigrations
 python manage.py migrate
 ```
@@ -49,8 +48,6 @@ python manage.py migrate
 
 ####5. Run the app####
 ```
-#!bash
-
 ./manage.py runserver
 
 ```
