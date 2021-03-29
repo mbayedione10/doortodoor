@@ -20,7 +20,9 @@
             <h3 class="pt-3">Statut Information: </h3>
             <p class="mt-3">
                 {% if liv.statut == "livré"%}
-            <p><i style="color: green;" class="fas fa-check"></i><span class="pl-2"> Statut mis a jour par: {{ liv.livraison_modified_by }}</span></p>
+            <p>
+            <i style="color: green;" class="btn btn-outline-success">{{ liv.prix_livraison }}</i>
+            <i style="color: green;" class="fas fa-check"></i><span class="pl-2"> {{ liv.livraison_modified_by }}</span></p>
             {% endif %}
     {% endfor %}
         </div>

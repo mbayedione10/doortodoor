@@ -99,7 +99,10 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
     def get(self, request,pk, *args, **kwargs):
         if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Livreurs'):
             livraison = Livraison.objects.get(pk=pk)
-            context = {'id': livraison.pk}
+            context = {
+                'id': livraison.pk,
+                }
+
             return render(request, 'doortodoor/ajouter-livraison.html', context)
         else:
             return redirect('dashboard')
@@ -159,6 +162,7 @@ class LivraisonDetails(LoginRequiredMixin, UserPassesTestMixin, View):
                 'livraison_modified_by': livraison_modified_by[0],
                 'statut': livraison.statut,
                 'date_statut': livraison.date_statut,
+                'prix_livraison': livraison.prix_livraison,
                 'livraison_id': livraison.pk
                 }
         #Append ship data
