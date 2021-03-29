@@ -14,8 +14,9 @@ STATUS_TYPES=(
 
 class Article(models.Model):
     libelle = models.CharField(max_length=100)
-    description =  models.TextField(blank=True)
-    #prix_article = models.IntegerField(null=True, blank=True) 
+    #description =  models.TextField(blank=True)
+    prix_article = models.IntegerField(default=0, blank=True)
+    montant_livraison =  models.IntegerField(default=0, blank=True)
     user = models.ManyToManyField(User)
     #Information du client
     nom_client = models.CharField(max_length=100)
@@ -33,7 +34,7 @@ class Livraison(models.Model):
     user = models.ManyToManyField(User)
     statut = models.CharField(max_length=20, choices=STATUS_TYPES, blank = False, null=False,  default=EN_COURS)
     date_statut = models.DateTimeField(auto_now_add=True)
-    prix_livraison = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0)
+    prix_livraison = models.IntegerField(default=0, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
