@@ -41,8 +41,9 @@ class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
         user autorisé: admin, client
         """ 
         libelle = request.POST.get('libelle')
-        description = request.POST.get('description')
-        #prix_article = request.POST.get('prix_article')
+        montant_livraison = request.POST.get('montant_livraison')
+        prix_article = request.POST.get('prix_article')
+
         nom_client = request.POST.get('nom_client')
         adresse_client = request.POST.get('adresse_client')
         contact_client = request.POST.get('contact_client')
@@ -53,8 +54,8 @@ class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
 
         article = Article.objects.create(
             libelle= libelle,
-            description= description,
-            #prix_article= prix_article,
+            montant_livraison= montant_livraison,
+            prix_article= prix_article,
             nom_client= nom_client,
             adresse_client= adresse_client,
             contact_client= contact_client,

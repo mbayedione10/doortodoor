@@ -8,20 +8,22 @@
             <form method="POST">
                 {% csrf_token %}
                 <div class="row">
-                    <div class="col-md-6 col-sm-12">
+                    <div class="col-md-4 col-sm-12">
                         <div class="form-group pt-3">
                             <label for="name">Libelle</label>
                             <input required class="form-control" type="text" placeholder="Article a livrer" name="libelle"/>
                         </div>
                     </div>
-                    <div class="col-md-6 col-sm-12">
-                        <!--div class="form-group pt-3">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group pt-3">
                             <label for="name">Prix Article</label>
                             <input class="form-control" type="text" placeholder="Prix Article" name="prix_article"/>
-                        </div-->
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
                         <div class="form-group pt-3">
-                            <label for="name">Description</label>
-                            <input class="form-control" type="text" placeholder="Description" name="description"/>
+                            <label for="name">Prix Livraison</label>
+                            <input required class="form-control" type="text" placeholder="Livraison" name="montant_livraison"/>
                         </div>
                     </div>
                 </div>
