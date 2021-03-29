@@ -237,7 +237,7 @@ class ModifierStatut(LoginRequiredMixin, UserPassesTestMixin, View):
         return redirect('dashboard')
 
     def test_func(self):
-        return self.request.user.groups.all() #filter(name='Staff').exists()
+        return self.request.user.groups.all()
 
 
 class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -253,22 +253,25 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
         ship = {
             'livraison_list': []
         }
-        montant_total = 0
+        montant_article = 0
+        montant_recu = 0
         nombre_livraison = 0
         user_id= request.user.id
 
         if request.user.groups.filter(name='Admin'):
             for liv in livraison:
-                montant_total +=liv.prix_livraison
+                montant_recu +=liv.prix_livraison
                 livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
                 article_item = Article.objects.filter(article = liv)
                 for article in article_item:
+                    montant_article += article.prix_article + article.montant_livraison
                     article_added_by = [user.username for user in User.objects.filter(article=article)]
                     ship_data ={
                                 'nom_client': article.nom_client,
                                 'libelle_article': article.libelle,
                                 'adresse_client': article.adresse_client,
                                 'date_ajout': article.date_ajout,
+                                'montant': article.prix_article + article.montant_livraison,
                                 'article_added_by': article_added_by[0],
                                 'livraison_modified_by': livraison_modified_by[0],
                                 'statut': liv.statut,
@@ -283,9 +286,10 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
         elif request.user.groups.filter(name='Clients'):
             article = Article.objects.filter(user = user_id)
             for art in article:
+                montant_article += art.prix_article + art.montant_livraison
                 livraison = Livraison.objects.filter(article=art)
                 for liv in livraison:
-                    montant_total +=liv.prix_livraison
+                    montant_recu +=liv.prix_livraison
                     livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
                     article_item = Article.objects.filter(article = liv)
                     article_added_by = [user.username for user in User.objects.filter(article=art)]
@@ -294,6 +298,7 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
                                 'libelle_article': art.libelle,
                                 'adresse_client': art.adresse_client,
                                 'date_ajout': art.date_ajout,
+                                'montant': art.prix_article + art.montant_livraison,
                                 'article_added_by': article_added_by[0],
                                 'livraison_modified_by': livraison_modified_by[0],
                                 'statut': liv.statut,
@@ -309,16 +314,18 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
             livraison = Livraison.objects.filter(created_on__year=today.year,
             created_on__month=today.month,created_on__day=today.day)
             for liv in livraison:
-                montant_total +=liv.prix_livraison
+                montant_recu +=liv.prix_livraison
                 livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
                 article_item = Article.objects.filter(article = liv)
                 for article in article_item:
+                    montant_article += article.prix_article + article.montant_livraison
                     article_added_by = [user.username for user in User.objects.filter(article=article)]
                     ship_data ={
                                 'nom_client': article.nom_client,
                                 'libelle_article': article.libelle,
                                 'adresse_client': article.adresse_client,
                                 'date_ajout': article.date_ajout,
+                                'montant': article.prix_article + article.montant_livraison,
                                 'article_added_by': article_added_by[0],
                                 'livraison_modified_by': livraison_modified_by[0],
                                 'statut': liv.statut,
@@ -333,8 +340,9 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
         #Ajouter les données dans context
         context={
             'livraison': ship['livraison_list'],
-            'montant_total': montant_total,
+            'montant_recu': montant_recu,
             'total_livraison': nombre_livraison,
+            'montant_articles': montant_article,
         }
 
         return render(request,'doortodoor/dashboard.html', context)
