@@ -7,6 +7,7 @@ from doortodoor.models import *
 from django.db.models import Q
 from django.conf import settings
 from django.core.mail import send_mail
+from .forms import *
 
 
 class Index(LoginRequiredMixin,UserPassesTestMixin, View):
@@ -86,6 +87,45 @@ class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.groups.all()
 
+
+class UpdateArticle(LoginRequiredMixin, UserPassesTestMixin,View):
+    """
+    fonction qui permet de mopdifier un aticle
+    prendre l'id de l'article et modifier enregistrer
+    user autorisé: admin, client
+    """
+
+    def get(self, request, pk, *args, **kwargs):
+        article = Article.objects.get(pk=pk)
+        livraison = Livraison.objects.filter(article=article)
+        statut = ''
+        for liv in livraison:
+            
+            statut = liv.statut
+        article_added_by = [user.username for user in User.objects.filter(article=article)]
+        username = request.user.username
+        form = ArticleForm(instance = article)
+        if username == article_added_by[0] and statut != "livré" :
+            return render(request, 'doortodoor/update-article.html', {'form': form})
+        
+        return redirect('dashboard')
+
+    def post(seelf, request, pk, *args, **kwargs):
+        # fetch the object related to passed id
+        article = Article.objects.get(pk=pk)
+        form = ArticleForm(request.POST or None,instance = article)
+        # save the data from the form and
+        # redirect to detail_view
+        if form.is_valid():
+            form.save()
+
+        context={
+            'form':form
+        }
+        return redirect('dashboard')
+
+    def test_func(self):
+        return self.request.user.groups.all()
 
 class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
     """
@@ -294,6 +334,7 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
                     article_item = Article.objects.filter(article = liv)
                     article_added_by = [user.username for user in User.objects.filter(article=art)]
                     ship_data ={
+                                'id_article': art.id,
                                 'nom_client': art.nom_client,
                                 'libelle_article': art.libelle,
                                 'adresse_client': art.adresse_client,
