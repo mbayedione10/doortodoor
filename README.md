@@ -21,7 +21,7 @@ python -m virtualenv myenv
 
 Active this env
 Mac: source myenv/bin/activate
-Windows: myeenv\Scripts\activate.bat
+Windows: myenv\Scripts\activate.bat
 
 ```
 
