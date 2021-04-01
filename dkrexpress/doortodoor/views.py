@@ -32,7 +32,8 @@ class About(LoginRequiredMixin, UserPassesTestMixin, View):
 class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
     def get(self, request, *args, **kwargs):
         if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Clients'):
-            return render(request, 'doortodoor/ajouter.html')
+            form = ArticleForm()
+            return render(request, 'doortodoor/ajouter.html', {'form': form})
         else:
             return redirect('dashboard')
 
@@ -90,7 +91,7 @@ class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
 
 class UpdateArticle(LoginRequiredMixin, UserPassesTestMixin,View):
     """
-    fonction qui permet de mopdifier un aticle
+    fonction qui permet de mopdifier ou supprimer un aticle
     prendre l'id de l'article et modifier enregistrer
     user autorisé: admin, client
     """
@@ -107,25 +108,27 @@ class UpdateArticle(LoginRequiredMixin, UserPassesTestMixin,View):
         form = ArticleForm(instance = article)
         if username == article_added_by[0] and statut != "livré" :
             return render(request, 'doortodoor/update-article.html', {'form': form})
-        
+
         return redirect('dashboard')
 
-    def post(seelf, request, pk, *args, **kwargs):
+    def post(self, request, pk, *args, **kwargs):
         # fetch the object related to passed id
         article = Article.objects.get(pk=pk)
         form = ArticleForm(request.POST or None,instance = article)
         # save the data from the form and
         # redirect to detail_view
-        if form.is_valid():
-            form.save()
+        if 'update' in request.POST:
+            if form.is_valid():
+                form.save()
 
-        context={
-            'form':form
-        }
+        elif 'delete'in request.POST:
+            article.delete()
+
         return redirect('dashboard')
 
     def test_func(self):
         return self.request.user.groups.all()
+
 
 class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
     """

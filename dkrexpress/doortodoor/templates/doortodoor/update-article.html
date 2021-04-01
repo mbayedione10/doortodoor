@@ -1,13 +1,66 @@
-<div class="main">
-    <!-- Create a Form -->
-    <form method="POST">
+{% extends 'doortodoor/base.html' %}
+ 
+{% block content %}
+{% load crispy_forms_tags %}
+<div class="container mb-5">
+    <div class="row justify-content-center mt-1">
+        <div class="col-md-12 col-sm-12 p-4">
+        <!-- Create a Form -->
+        <form method="POST">
         <!-- Security token by Django -->
         {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-4 col-sm-12">
+              {{ form.libelle|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4 col-sm-12">
+              {{ form.prix_article|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4 col-sm-12">
+                {{ form.montant_livraison|as_crispy_field }}
+              </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4 col-sm-12">
+              {{ form.nom_client|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4 col-sm-12">
+              {{ form.adresse_client|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4 col-sm-12">
+                {{ form.contact_client|as_crispy_field }}
+              </div>
+          </div>
+       
   
-        <!-- form as paragraph -->
-        {{ form.as_p }}
-  
-        <input type="submit" value="Update">
+        <button type="submit" class="btn btn-outline-success" value="Update" name="update">Modifier
+        </button>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#submitModal">
+                    Supprimer
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="submitModal" tabindex="-1" aria-labelledby="submitModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="submitModalLabel">Suppression</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Confirmez vous la suppression?</p>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Retour</button>
+                        <button type="submit" name="delete" class="btn btn-danger">Supprimer</button>
+                        </div>
+                    </div>
+                    </div>
+        </div>
     </form>
-  
 </div>
+
+{% endblock content %}
