@@ -28,13 +28,15 @@
                     <tr>
                         
                         <th scope="col">ID</th>
-                        <th scope="col">Date Retour</th>
+                        <th scope="col">Date Ajout</th>
                         <th scope="col">Modifé par</th>
                         <th scope="col">Article</th>
                         <th scope="col">Nom client</th>
                         <th scope="col">Contact</th>
                         <th scope="col">Statut</th>
+                        {% if request.user.groups.all.0.name != "Employes" %}
                         <th colspan="2">Edit</th>
+                        {% endif %}
                         
                         <!--th scope="col">Modifier</th-->
                     </tr>
@@ -43,7 +45,7 @@
                     {% for ship in livraison %}
                     <tr>
                         <th scope="row">{{ ship.livraison_id }}</th>
-                        <td>{{ ship.date_statut }}</td>
+                        <td>{{ ship.date_ajout }}</td>
                         <td>{{ ship.livraison_modified_by  }}</td>
                         <td>{{ ship.libelle_article }}</td>
                         <td>{{ ship.nom_client }}</td>
@@ -59,11 +61,16 @@
                         </td>
                         
                             {% if request.user.groups.all.0.name == "Livreurs" %}
+                            <td>
                             <a href="{% url 'modifier-livraison' ship.livraison_id %}"><i class="fas fa-exchange-alt"></i></a>
+                            </td>
+
                             {% elif request.user.groups.all.0.name == "Clients" %}
+                            <td>
                             <a href="{% url 'update' ship.id_article %}"><i class="far fa-edit"></i></a>
                             {% endif %}
-                        
+                            </td>
+
                             {% if request.user.groups.all.0.name == "Admin" %}
                             <td>
                                 <a href="{% url 'update' ship.id_article %}"><i class="far fa-edit"></i></a>
