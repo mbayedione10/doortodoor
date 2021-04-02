@@ -157,8 +157,13 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
     def get(self, request,pk, *args, **kwargs):
         if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Livreurs'):
             livraison = Livraison.objects.get(pk=pk)
+
+            article = Article.objects.filter(article = livraison)
+            for art in article:
+                form1 = ArticleForm(instance = art)
             context = {
                 'id': livraison.pk,
+                'form1': form1,
                 }
 
             return render(request, 'doortodoor/ajouter-livraison.html', context)
