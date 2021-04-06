@@ -1,44 +1,60 @@
 {% extends 'doortodoor/base.html' %}
-
 {% block content %}
-{% load crispy_forms_tags %}
 <div class="container mb-5">
     <div class="row justify-content-center mt-1">
         <div class="col-md-12 col-sm-12 p-4">
-
             <form method="POST">
                 {% csrf_token %}
-                <div class="form-row">
-                    <div class="form-group col-md-4 col-sm-12">
-                      {{ form.libelle|as_crispy_field }}
+                <div class="row">
+                  <div class="col-md-4 col-sm-12">
+                    <div class="form-group pt-3">
+                        <label for="name">Libelle</label>
+                        <input required class="form-control" type="text" placeholder="Article a livrer" name="libelle"/>
                     </div>
-                    <div class="form-group col-md-4 col-sm-12">
-                      {{ form.prix_article|as_crispy_field }}
+                </div>
+                <div class="col-md-4 col-sm-12">
+                  <div class="form-group pt-3">
+                      <label for="name">Prix Article</label>
+                      <input required class="form-control" type="text" placeholder="Prix Article" name="prix_article"/>
                     </div>
-                    <div class="form-group col-md-4 col-sm-12">
-                        {{ form.montant_livraison|as_crispy_field }}
-                      </div>
                   </div>
-                  <div class="form-row">
-                    <div class="form-group col-md-4 col-sm-12">
-                      {{ form.nom_client|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-md-4 col-sm-12">
-                      {{ form.adresse_client|as_crispy_field }}
-                    </div>
-                    <div class="form-group col-md-4 col-sm-12">
-                        {{ form.contact_client|as_crispy_field }}
+                  <div class="col-md-4 col-sm-12">
+                      <div class="form-group pt-3">
+                        <label for="name">Prix Livraison</label>
+                        <input required class="form-control" type="text" placeholder="Livraison" name="montant_livraison"/>
                       </div>
-                  </div>
-                  
-                <button type="submit" class="btn btn-outline-success" name="another" href="{% url 'ajouter' %}">
-                    Save and add
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group pt-3">
+                            <label for="name">Nom Client</label>
+                            <input required class="form-control" type="text" placeholder="Client ou Société" name="nom_client"/>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group pt-3">
+                            <label for="name">Adresse Client</label>
+                            <input required class="form-control" type="text" placeholder="Lieu de livraison" name="adresse_client"/>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group pt-3">
+                            <label for="name">Contact Client</label>
+                            <input required class="form-control" type="text" placeholder="Numero de Telephone" name="contact_client"/>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button type="submit" type="submit" class="btn btn-outline-success" name="another" href="{% url 'ajouter' %}">
+                    Enregistrer et ajouter un autre
                 </button>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-success" name="save" data-toggle="modal" data-target="#submitModal">
-                    Save
+                    Ajouter
                 </button>
-
                 <!-- Modal -->
                 <div class="modal fade" id="submitModal" tabindex="-1" aria-labelledby="submitModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -48,20 +64,17 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        </div>
-                        <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">Retour</button>
-                        <button type="submit" class="btn btn-success">Envoyer</button>
-                        </div>
-                    </div>
-                    </div>
-                </div>
+                      </div>
+                      <div class="modal-footer">
+                      <button type="button" class="btn btn-light" data-dismiss="modal">Retour</button>
+                      <button type="submit" class="btn btn-success">Envoyer</button>
+                      </div>
+                  </div>
+                  </div>
+              </div>
 
-  
-                <!--button class="btn btn-dark mt-5">Place Order!</button-->
-            </form>
-        </div>
-
-    </div>
+          </form>
+      </div>
+  </div>
 </div>
 {% endblock content %}

@@ -34,7 +34,7 @@ class Livraison(models.Model):
     user = models.ManyToManyField(User)
     statut = models.CharField(max_length=20, choices=STATUS_TYPES, blank = False, null=False,  default=EN_COURS)
     date_statut = models.DateTimeField(auto_now_add=True)
-    prix_livraison = models.IntegerField(blank=True)
+    prix_livraison = models.IntegerField(default=0,blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
