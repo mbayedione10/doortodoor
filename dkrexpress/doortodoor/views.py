@@ -175,7 +175,7 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
         livraison.prix_livraison = request.POST.get('prix_livraison')
         livraison.statut = "livré"
         user_id= request.user.id
-        client = [user.username for user in User.objects.filter(livraison=livraison)]
+        client = ''
         list_id = []
         list_id.append(user_id)
         livraison.user.clear()
@@ -183,35 +183,37 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
         livraison.date_statut = datetime.now()
 
         livraison.save()
-        #After everything is done, send confirmation mail to the user
         article_item = Article.objects.filter(article = livraison)
         article_added_by=[]
         libelle=''
         for article in article_item:
-                article_added_by = [user.email for user in User.objects.filter(article=article)]
-                libelle = article.libelle
+            client = [user.username for user in User.objects.filter(article=article)]
+            article_added_by = [user.email for user in User.objects.filter(article=article)]
+            libelle = article.libelle
 
-        # body = (f'Bonjour {client[0]},\n'
-        # f'Votre article a été livré avec succés par {request.user.username} \n'
-        # f'Montant Livraison: {livraison.prix_livraison}\n'
-        # 'Merci\n'
-        # 'Door To Door Team!'
-        # )
-        # email_from=settings.EMAIL_HOST_USER
-        # send_mail(
-        #     f'Livraison {libelle}',
-        #     body,
-        #     email_from,
-        #     article_added_by,
-        #     fail_silently=False
-        # )
+        #After everything is done, send confirmation mail to the user
+        if settings.DEBUG == False:
+            body = (f'Bonjour {client[0]},\n'
+            f'Votre article a été livré avec succés par {request.user.username} \n'
+            f'Montant Recu: {livraison.prix_livraison}\n'
+            'Merci\n'
+            'Door To Door Team!'
+            )
+            email_from=settings.EMAIL_HOST_USER
+            send_mail(
+                f'Livraison {libelle}',
+                body,
+                email_from,
+                article_added_by,
+                fail_silently=False
+            )
         context = {
                 'id': livraison.pk,
             }
         return redirect('livraison-details', pk=livraison.pk)
 
     def test_func(self):
-        return self.request.user.groups.all() #filter(name='')
+        return self.request.user.groups.all()
 
 
 class LivraisonDetails(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -239,7 +241,7 @@ class LivraisonDetails(LoginRequiredMixin, UserPassesTestMixin, View):
         return render(request, 'doortodoor/livraison-details.html', context)
     
     def test_func(self):
-        return self.request.user.groups.all() #filter(name='Staff').exists()
+        return self.request.user.groups.all()
 
 
 class ModifierStatut(LoginRequiredMixin, UserPassesTestMixin, View):
