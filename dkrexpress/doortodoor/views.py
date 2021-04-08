@@ -315,7 +315,7 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
         user autorisé: admin | client | livreur | Employe
         """
         today = datetime.today()
-        #TODO Change livraison filter
+        # TODO Change livraison filter
         #livraison = Livraison.objects.filter(created_on__year=today.year,
             #created_on__month=today.month,created_on__day=today.day)
         livraison = Livraison.objects.all()
@@ -697,26 +697,6 @@ class ListeRetourSearch(LoginRequiredMixin, UserPassesTestMixin, View):
         }
 
         return render(request,'doortodoor/liste-retour.html', context)
-
-    def test_func(self):
-        return self.request.user.groups.all()
-
-class DashboardByID(LoginRequiredMixin, UserPassesTestMixin, View):
-    def get(self, request, *args, **kwargs):
-        req = self.request.GET.get("user")
-        users = User.objects.all()
-        user_id = 0
-        for user in users:
-            if req == user.username:
-                print(user)
-                user_id = user.id
-                article = Article.objects.filter(user=user.id)
-                for art in article:
-                    print(art)
-                    livraison = Livraison.objects.filter(article=art)
-                    print(livraison)
-
-        return render(request,'doortodoor/dashboard.html')
 
     def test_func(self):
         return self.request.user.groups.all()

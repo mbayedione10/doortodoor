@@ -12,7 +12,6 @@ urlpatterns = [
     path('livraison/<int:pk>', ModifierLivraison.as_view(), name='ajout-livraison'),
     path('dashboard/', Dashboard.as_view(), name = 'dashboard'),
     path('dashboard/search', DashboardSearch.as_view(), name = 'dashboard-search'),
-    path('dashboard/byUser', DashboardByID.as_view(), name = 'dashboard-by-id'),
     path('liste-retour/', ListeRetour.as_view(), name='liste-retour'),
     path('retour/search', ListeRetourSearch.as_view(), name = 'retour-search'),
     path('details/<int:pk>', LivraisonDetails.as_view(), name='livraison-details'),

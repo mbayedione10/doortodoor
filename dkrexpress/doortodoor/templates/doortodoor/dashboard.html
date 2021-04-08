@@ -18,61 +18,6 @@
             <h1 class="text-center" style="color: red;">{{ total_livraison }}</h1>
         </div>
     </div> 
-
-
-    <!--form method="POST">
-        <select name="client">
-        {% for user in users %}
-        {% if user.groups.all.0.name == "Clients"  %}
-            <option value="{{ user.id }}">{{ user }}</option>
-        {% endif %}
-        {% endfor %}
-        </select>
-    </form-->
-
-
-
-
-    <!--div class="row justify-content-center mt-5">
-
-        <div class="col-md-4 col-sm-12 text-center">
-            <form method="GET" action="#">
-                <div class="md-form mt-0 active-cyan-2">
-                    <input type="text" name="q" class="form-control" placeholder="Search Our Menu" aria-label="Search" value="{{ request.GET.q }}">
-                </div>
-            </form>
-        </div-->
-
-        <!--form method="GET" action="{% url 'dashboard-by-id' %}">
-
-            <select name="user" id="">
-                    {% for user in users %}
-                    {% if user.groups.all.0.name == "Livreurs"  %}
-                        <option class="dropdown-item" type="submit" value="{{ user.id }}">{{ user }}</option>
-                    {% endif %}
-                    
-                    {% endfor %}
-                    <div class="dropdown-divider"></div>
-                    {% for user in users %}
-                    {% if user.groups.all.0.name == "Clients"  %}
-                        <option class="dropdown-item" type="submit" value="{{ user.id }}">{{ user }}</option>
-                    {% endif %}
-                    {% endfor %}
-            </select>
-            <input type="submit" value="{{ request.GET.name }}">
-
-    </form-->
-  
-
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-4 col-sm-12 text-center">
-            <form method="GET" action="{% url 'dashboard-by-id' %}">
-                <div class="md-form mt-0 active-cyan-2">
-                    <input type="text" name="user" class="form-control" placeholder="Chercher un article" aria-label="Search" value="{{ request.GET.name }}">
-                </div>
-            </form>
-        </div>
-    </div>
     <div class="row  mt-3 justify-content-end">
         <div class="col-md-3 col-sm-6">
             <form method="GET" action="{% url 'dashboard-search' %}">
