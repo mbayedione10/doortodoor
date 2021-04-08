@@ -1,1 +1,1 @@
-from dkrexpress.settings.common import *
+from dkrexpress.settingss.common import *
