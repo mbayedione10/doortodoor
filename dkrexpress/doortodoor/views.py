@@ -207,10 +207,7 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
                 article_added_by,
                 fail_silently=False
             )
-        context = {
-                'id': livraison.pk,
-            }
-        return redirect('livraison-details', pk=livraison.pk)
+        return redirect('dashboard')
 
     def test_func(self):
         return self.request.user.groups.all()
