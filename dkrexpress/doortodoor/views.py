@@ -313,9 +313,9 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
         """
         today = datetime.today()
         # TODO Change livraison filter
-        #livraison = Livraison.objects.filter(created_on__year=today.year,
-            #created_on__month=today.month,created_on__day=today.day)
-        livraison = Livraison.objects.all()
+        livraison = Livraison.objects.filter(created_on__year=today.year,
+            created_on__month=today.month,created_on__day=today.day)
+        #livraison = Livraison.objects.all()
         ship = {
             'livraison_list': []
         }
