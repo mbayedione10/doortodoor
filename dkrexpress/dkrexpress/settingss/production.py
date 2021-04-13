@@ -1,5 +1,5 @@
 from dkrexpress.settingss.common import *
-import django_heroku
+
 
 DEBUG = False
 
@@ -19,6 +19,3 @@ EMAIL_HOST_PASSWORD = 'Guneyi120'
 # SECURE_HSTS_SECONDS = 31536000 #1 year
 # SECURE_HSTS_PRELOAD = True
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-
-# Activate Django-Heroku.
-django_heroku.settings(locals())
