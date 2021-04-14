@@ -23,7 +23,7 @@ from doortodoor.views import Index
 
 urlpatterns = [
     path('', Index.as_view(), name = 'index'),
-    url(r'^admin/', admin.site.urls),
+    url('d0oai32492384h24ui234nij23n4k2jnkjnkjn/', admin.site.urls),
     url('doortodoor/', include('doortodoor.urls')),
     path('accounts/', include('allauth.urls')),
 
