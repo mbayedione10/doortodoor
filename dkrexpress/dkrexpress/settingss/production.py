@@ -7,8 +7,8 @@ ALLOWED_HOSTS = [
     '*'
 ]
 
-EMAIL_HOST_USER = 'nioulboy@gmail.com'
-EMAIL_HOST_PASSWORD = 'Guneyi120'
+EMAIL_HOST_USER = 'mail'
+EMAIL_HOST_PASSWORD = 'password'
 
 # #HTTPS Settings
 # SESSION_COOKIE_SECURE = True
