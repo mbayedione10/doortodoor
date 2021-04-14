@@ -26,9 +26,12 @@ with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG =False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['104.236.104.196',
+		'localhost',
+
+]
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -94,12 +97,24 @@ WSGI_APPLICATION = 'dkrexpress.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+if DEBUG:
+	DATABASES = {
+   		'default': {
+        		'ENGINE': 'django.db.backends.sqlite3',
+        		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    		}
+	}
+else:
+	DATABASES = {
+    		'default': {
+        		'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        		'NAME': 'dkrexpress',
+		      	'USER': 'nioulboy',
+		        'PASSWORD': 'nioulboy',
+		        'HOST': 'localhost',
+		        'PORT': '',
+		}
+	}
 
 
 # Password validation
@@ -157,8 +172,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_POST = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'mail'
-EMAIL_HOST_PASSWORD = 'password'
+EMAIL_HOST_USER = 'nioulboy@gmail.com'
+EMAIL_HOST_PASSWORD = 'Guneyi120'
 
 
 # #HTTPS Settings
