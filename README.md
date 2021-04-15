@@ -18,7 +18,6 @@ There will be three sides to this application and users must be connected to use
 * [Database migrations](#4-Apply-database-migrations)
 * [Test local](#5-Run-the-app)
 * [App Users](#6-Manage-Users)
-* [Test local](#5.Run-the-app)
 * [Troubleshooting](#7-Troubleshooting)
 * [Contact Information ](#Contact-Information)
 
