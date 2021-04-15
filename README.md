@@ -93,24 +93,27 @@ python manage.py runserver
 Now, open a Web browser and go to admin on your local domain   
 🚨 check `dkrexpress/dkrexpress/urls.py` to know URL of `admin.site.urls`  
 You should see the admin’s login screen:  
+\
 <img src="https://docs.djangoproject.com/en/3.2/_images/admin01.png" align="center"
-     alt="Size Limit logo by Anton Lovchikov">  
+     alt="Size Limit logo by Anton Lovchikov"> 
+     \ 
 Now, try logging in with the superuser account you created in the previous step  
 You should see the Django admin index page:  
+\
  <img src="https://docs.djangoproject.com/en/3.2/_images/admin02.png" align="center"
      alt="Size Limit logo by Anton Lovchikov">  
      \
 Users must be connected to use the app so tests need to have data: users with groups  
 * Create Groups:  
-Must have 4 groups:
-| Groups Name |                             Description                                      |
-|-------------|------------------------------------------------------------------------------|
-| Admin       | Can use like Clients or Livreurs account,have all dashboard and manage them  |
-| Clients     | Add, modify or delete product and view his Dashboard                         |
-| Employes    | View all dashboard                                                           |
-| Livreurs    | View today's product and modify status "doing", "done", "return"             |
+Must have 4 groups:  
+| Groups Name |                             Description                                      |  
+|-------------|------------------------------------------------------------------------------|  
+| Admin       | Can use like Clients or Livreurs account,have all dashboard and manage them  |  
+| Clients     | Add, modify or delete product and view his Dashboard                         |  
+| Employes    | View all dashboard                                                           |  
+| Livreurs    | View today's product and modify status "doing", "done", "return"             |  
 
-* Create Users:
+* Create Users:  
 4 users mustt be create and associate it a group  
 The groups this user belongs to. A user will get all permissions granted to each of their groups.  
 Run tthe App again [like this](#5.Run-the-app) and Connect with users created
