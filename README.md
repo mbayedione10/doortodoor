@@ -107,10 +107,10 @@ You should see the Django admin index page:
 Users must be connected to use the app so tests need to have data: users with groups  
 * Create Groups:  
 Must have 4 groups:  
-Groups Name | Description  
-------------| -----------  
-`Admin`     | Can use like Clients or Livreurs account,have all dashboard and manage them    
-`Clients`   | Add, modify or delete product and view his Dashboard                            
+Group Names | Description  
+---------------| -----------  
+`Admin`           | Can use like Clients or Livreurs account,have all dashboard and manage them    
+`Clients`    | Add, modify or delete product and view his Dashboard                            
 `Employes`  | View all dashboard                                                            
 `Livreurs`  | View today's product and modify status "doing", "done", "return"   
  
