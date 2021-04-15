@@ -1,6 +1,6 @@
-#====================
-#Door To Door
-#====================
+#====================  
+#Door To Door  
+#====================  
 
 This is DoorToDoor App
 we will build Delivery Application using Python 3 and Django  
@@ -26,9 +26,6 @@ There will be three sides to this application and users must be connected to use
 
 ## Demo
 View the application at [Door To Door App](http://104.236.104.196/)
-
-
-
 
 ## 1.Python environment
 
@@ -82,7 +79,7 @@ The api should now be running at http://127.0.0.1:8000/
 
 
 ## 6.Manage Users
-Creating an admin user  
+* Create an admin user  
 First we’ll need to create a user who can login to the admin site. Run the following command:  
 
 ```
@@ -94,14 +91,15 @@ python manage.py runserver
 ```
 
 Now, open a Web browser and go to admin on your local domain   
-🚨 check dkrexpress/dkrexpress/urls.py to know URL of admin.site.urls  
+🚨 check `dkrexpress/dkrexpress/urls.py` to know URL of `admin.site.urls`  
 You should see the admin’s login screen:  
 <img src="https://docs.djangoproject.com/en/3.2/_images/admin01.png" align="right"
-     alt="Size Limit logo by Anton Lovchikov" width="120" height="178">
+     alt="Size Limit logo by Anton Lovchikov" width="120" height="178">  
 Now, try logging in with the superuser account you created in the previous step  
 You should see the Django admin index page:  
  <img src="https://docs.djangoproject.com/en/3.2/_images/admin02.png" align="right"
-     alt="Size Limit logo by Anton Lovchikov" width="120" height="178">
+     alt="Size Limit logo by Anton Lovchikov" width="120" height="178">  
+     \
 Users must be connected to use the app so tests need to have data: users with groups  
 * Create Groups:  
 Must have 4 groups:
