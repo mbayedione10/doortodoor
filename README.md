@@ -115,7 +115,7 @@ Group Names | Description
 * Create Users:  
 4 users mustt be create and associate it a group  
 The groups this user belongs to. A user will get all permissions granted to each of their groups.  
-Run tthe App again [like this](#5.Run-the-app) and Connect with users created
+Run tthe App again [like this](#5-Run-the-app) and Connect with users created
 
 ## 7 Troubleshooting 
 
