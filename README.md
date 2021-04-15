@@ -1,8 +1,6 @@
-#====================  
-#    Door To Door  
-#====================  
+ #    Door To Door  
 
-This is DoorToDoor App
+This is DoorToDoor App  
 we will build Delivery Application using Python 3 and Django  
 
 There will be three sides to this application and users must be connected to use it:  
@@ -14,20 +12,21 @@ There will be three sides to this application and users must be connected to use
 
 ## How do I get set up?
 * [Demo](#demo)
-* [Install Python](#1.Python-environment)
-* [Clone Project](#2.Clone-repositorie)
-* [Install required python packages](#3.Install-Packages)
-* [Database migrations](#4.Apply-database-migrations)
-* [App User](#6.Manage-Users)
+* [Install Python](#1-Python-environment)
+* [Clone Project](#2-Clone-repositorie)
+* [Install required python packages](#3-Install-Packages)
+* [Database migrations](#4-Apply-database-migrations)
+* [Test local](#5-Run-the-app)
+* [App Users](#6-Manage-Users)
 * [Test local](#5.Run-the-app)
-* [Troubleshooting](#6.-Troubleshooting)
+* [Troubleshooting](#7-Troubleshooting)
 * [Contact Information ](#Contact-Information)
 
 
 ## Demo
 View the application at [Door To Door App](http://104.236.104.196/)
 
-## 1.Python environment
+## 1 Python environment
 
 The environement setup process depends on your system. Do some research to find out how to do it on OS.  
 For MAC you can use the following commands  
@@ -47,7 +46,7 @@ Windows: myenv\Scripts\activate.bat
 
 ```
 
-## 2.Clone repositorie
+## 2 Clone repositorie
 Clone the repo and move to the project folder
 ```
 git clone *repo_url*
@@ -55,20 +54,20 @@ cd dkrexpress
 
 ```
 
-## 3.Install Packages
+## 3 Install Packages
 ```
 
 pip install -r requirements.txt
 
 ```
 
-## 4.Apply database migrations
+## 4 Apply database migrations
 ```
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-## 5.Run the app
+## 5 Run the app
 Let’s start the development server and explore it.
 
 ```
@@ -78,7 +77,7 @@ python manage.py runserver
 The api should now be running at http://127.0.0.1:8000/
 
 
-## 6.Manage Users
+## 6 Manage Users
 * Create an admin user  
 First we’ll need to create a user who can login to the admin site. Run the following command:  
 
@@ -119,7 +118,7 @@ Group Names | Description
 The groups this user belongs to. A user will get all permissions granted to each of their groups.  
 Run tthe App again [like this](#5.Run-the-app) and Connect with users created
 
-## 6. Troubleshooting 
+## 7 Troubleshooting 
 
 If there is any problem during the installation of the python package, just install each them one by one using   
 ```
