@@ -94,11 +94,11 @@ Now, open a Web browser and go to admin on your local domain
 🚨 check `dkrexpress/dkrexpress/urls.py` to know URL of `admin.site.urls`  
 You should see the admin’s login screen:  
 <img src="https://docs.djangoproject.com/en/3.2/_images/admin01.png" align="center"
-     alt="Size Limit logo by Anton Lovchikov" width="120" height="178">  
+     alt="Size Limit logo by Anton Lovchikov">  
 Now, try logging in with the superuser account you created in the previous step  
 You should see the Django admin index page:  
  <img src="https://docs.djangoproject.com/en/3.2/_images/admin02.png" align="center"
-     alt="Size Limit logo by Anton Lovchikov" width="120" height="178">  
+     alt="Size Limit logo by Anton Lovchikov">  
      \
 Users must be connected to use the app so tests need to have data: users with groups  
 * Create Groups:  
