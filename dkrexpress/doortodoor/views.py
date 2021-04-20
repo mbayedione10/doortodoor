@@ -21,12 +21,11 @@ class Index(LoginRequiredMixin,UserPassesTestMixin, View):
         return self.request.user.groups.all()
 
 
-class About(LoginRequiredMixin, UserPassesTestMixin, View):
+class About(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'doortodoor/about.html')
     
-    def test_func(self):
-        return self.request.user.groups.all()
+
 
 
 class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
