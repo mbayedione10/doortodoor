@@ -37,7 +37,6 @@
                 <thead>
                     <tr>
                         
-                        <th scope="col">ID</th>
                         <th scope="col">Ajouté le</th>
                         <th scope="col">Ajouté par</th>
                         <th scope="col">Article</th>
@@ -56,8 +55,7 @@
                     {% for ship in livraison %}
                     {% if request.user.groups.all.0.name == "Livreurs" and ship.statut != "livré" %}
                     <tr>
-                        <th scope="row">{{ ship.livraison_id }}</th>
-                        <td>{{ ship.date_ajout }}</td>
+                        <th scope="row">{{ ship.date_ajout }}</th>
                         <td>{{ ship.article_added_by  }}</td>
                         <td>{{ ship.libelle_article }}</td>
                         <td>{{ ship.nom_client }}</td>
@@ -105,8 +103,7 @@
                     </tr>
                     {% elif request.user.groups.all.0.name != "Livreurs" %}
                     <tr>
-                        <th scope="row">{{ ship.livraison_id }}</th>
-                        <td>{{ ship.date_ajout }}</td>
+                        <th scope="row">{{ ship.date_ajout  }}</th>
                         <td>{{ ship.article_added_by  }}</td>
                         <td>{{ ship.libelle_article }}</td>
                         <td>{{ ship.nom_client }}</td>
