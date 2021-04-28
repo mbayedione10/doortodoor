@@ -43,6 +43,10 @@
                         <th scope="col">Nom Client</th>                        
                         <th scope="col">Adresse</th>
                         <th scope="col">Contact</th>
+                        {% if request.user.groups.all.0.name == "Admin" %}
+                        <th scope="col">Prix Art</th>
+                        <th scope="col">Prix Liv</th>
+                        {% endif %}
                         <th scope="col">Prix</th>
                         <th scope="col">Encaissement</th>
                         <th scope="col">Statut</th>
@@ -109,6 +113,10 @@
                         <td>{{ ship.nom_client }}</td>
                         <td>{{ ship.adresse_client }}</td>
                         <td>{{ ship.contact_client }}</td>
+                        {% if request.user.groups.all.0.name == "Admin" %}
+                        <td>{{ ship.prix_art }}</td>
+                        <td>{{ ship.prix_liv }}</td>
+                        {% endif %}
                         <td>{{ ship.montant }}</td>
                         <td>{{ ship.prix_livraison }}</td>
                         <td>

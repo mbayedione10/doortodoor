@@ -432,6 +432,8 @@ class DashboardSearch(LoginRequiredMixin, UserPassesTestMixin, View):
                                 'libelle_article': article.libelle,
                                 'adresse_client': article.adresse_client,
                                 'date_ajout': article.date_ajout,
+                                'prix_art': article.prix_article,
+                                'prix_liv': article.montant_livraison,
                                 'montant': article.prix_article + article.montant_livraison,
                                 'article_added_by': article_added_by[0],
                                 'livraison_modified_by': livraison_modified_by[0],
