@@ -23,7 +23,7 @@ There will be three sides to this application and users must be connected to use
 
 
 ## Demo
-View the application at [Door To Door App](http://104.236.104.196/)
+View the application at [Door To Door App](https://www.dkrxpress.com/)
 
 ## 1 Python environment
 
