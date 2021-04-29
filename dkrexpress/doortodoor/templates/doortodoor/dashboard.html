@@ -120,12 +120,22 @@
                         <td>{{ ship.montant }}</td>
                         <td>{{ ship.prix_livraison }}</td>
                         <td>
+                            {% if request.user.groups.all.0.name != "Admin" %}
                             {% if ship.statut == "livré"%}
                             <i style="color: green;" class="fas fa-check"></i>
                             {% elif ship.statut == "en cours" %}
                             <i style="color: rgb(14, 13, 12);" class="fas fa-ellipsis-h"></i>
                             {% elif ship.statut == "retour" %}
                             <i style="color: red;" class="fas fa-times"></i>
+                            {% endif %}
+                            {% else %}
+                            {% if ship.statut == "livré"%}
+                            <a>Livré</a>
+                            {% elif ship.statut == "en cours" %}
+                            <a>En cours</a>
+                            {% elif ship.statut == "retour" %}
+                            <a>Retour</a>
+                            {% endif %}
                             {% endif %}
                         </td>
                         {% if request.user.groups.all.0.name != "Employes" %}
