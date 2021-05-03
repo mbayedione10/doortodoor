@@ -312,8 +312,8 @@ class Dashboard(LoginRequiredMixin, UserPassesTestMixin, View):
         """
         today = datetime.today()
         # TODO Change livraison filter
-        livraison = Livraison.objects.filter(created_on__year=today.year,
-            created_on__month=today.month,created_on__day=today.day)
+        livraison = Livraison.objects.filter(date_statut__year=today.year,
+            date_statut__month=today.month,date_statut__day=today.day)
         #livraison = Livraison.objects.all()
         ship = {
             'livraison_list': []
@@ -411,7 +411,7 @@ class DashboardSearch(LoginRequiredMixin, UserPassesTestMixin, View):
         today = datetime.today()
         query_date_filter = datetime.today()
         query_date_filter = datetime.strptime(query, "%Y-%m-%d")
-        livraison = Livraison.objects.filter(Q(created_on__icontains=query))
+        livraison = Livraison.objects.filter(Q(date_statut__icontains=query))
         ship = {
             'livraison_list': []
         }
