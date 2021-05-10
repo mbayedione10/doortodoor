@@ -703,3 +703,98 @@ class ListeRetourSearch(LoginRequiredMixin, UserPassesTestMixin, View):
 
 
 
+class ListeEnCours(LoginRequiredMixin,UserPassesTestMixin,View):
+    def get(self, request, *args, **kargs):
+        """
+        parcourir toutes les livraisons en cours ajouter les elements au tableau de bord
+        Calculer montant total
+        Nombre de livraison total
+        user autorisé: admin | client | livreur
+        """
+        livraison = Livraison.objects.filter(statut='en cours')
+        ship = {
+            'livraison_list': []
+        }
+        montant_article = 0
+        montant_recu = 0
+        nombre_livraison = 0
+        user_id= request.user.id
+
+        if request.user.groups.filter(name='Clients'):
+            article = Article.objects.filter(user = user_id)
+            for art in article:
+                livraison = Livraison.objects.filter(article=art, statut='en cours')
+                for liv in livraison:
+                    montant_recu +=liv.prix_livraison
+                    livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
+                    article_item = Article.objects.filter(article = liv)
+                    article_added_by = [user.username for user in User.objects.filter(article=art)]
+                    ship_data ={
+                                'id_article': art.id,
+                                'nom_client': art.nom_client,
+                                'contact_client': art.contact_client,
+                                'libelle_article': art.libelle,
+                                'adresse_client': art.adresse_client,
+                                'date_ajout': art.date_ajout,
+                                'montant': art.prix_article + art.montant_livraison,
+                                'article_added_by': article_added_by[0],
+                                'livraison_modified_by': livraison_modified_by[0],
+                                'statut': liv.statut,
+                                'date_statut': liv.date_statut,
+                                'prix_livraison': liv.prix_livraison,
+                                'livraison_id': liv.pk
+                                }
+                    montant_article += ship_data['montant']
+                        #Append ship data
+                    ship['livraison_list'].append(ship_data)
+                    if liv.statut == "livré":                    
+                        nombre_livraison += 1
+
+        else:
+            for liv in livraison:
+                livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
+                if request.user.groups.filter(name='Livreurs'):
+                    if livraison_modified_by[0]==request.user.username:
+                        montant_recu +=liv.prix_livraison
+                        if liv.statut == "livré":
+                            nombre_livraison +=1
+                else:
+                    montant_recu +=liv.prix_livraison
+                    if liv.statut == "livré":
+                        nombre_livraison +=1
+                article_item = Article.objects.filter(article = liv)
+                for article in article_item:
+                    article_added_by = [user.username for user in User.objects.filter(article=article)]
+                    ship_data ={
+                                'id_article': article.id,
+                                'nom_client': article.nom_client,
+                                'contact_client': article.contact_client,
+                                'libelle_article': article.libelle,
+                                'adresse_client': article.adresse_client,
+                                'date_ajout': article.date_ajout,
+                                'prix_art': article.prix_article,
+                                'prix_liv': article.montant_livraison,
+                                'montant': article.prix_article + article.montant_livraison,
+                                'article_added_by': article_added_by[0],
+                                'livraison_modified_by': livraison_modified_by[0],
+                                'statut': liv.statut,
+                                'date_statut': liv.date_statut,
+                                'prix_livraison': liv.prix_livraison,
+                                'livraison_id': liv.pk
+                                }
+                    montant_article += ship_data['montant']
+                    #Append ship data
+                    ship['livraison_list'].append(ship_data)
+
+        ship['livraison_list'].sort(key=lambda item:item['date_ajout'], reverse=False)
+        #Ajouter les données dans context
+        context={
+            'livraison': ship['livraison_list'],
+            'montant_recu': montant_recu,
+            'total_livraison': nombre_livraison,
+            'montant_articles': montant_article,
+        }
+        return render(request,'doortodoor/dashboard.html', context)
+
+    def test_func(self):
+        return self.request.user.groups.all()

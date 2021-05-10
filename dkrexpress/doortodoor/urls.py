@@ -17,6 +17,7 @@ urlpatterns = [
     path('retour/search', ListeRetourSearch.as_view(), name = 'retour-search'),
     path('details/<int:pk>', LivraisonDetails.as_view(), name='livraison-details'),
     path('modifier/<int:pk>', ModifierStatut.as_view(), name='modifier-livraison'),
+    path('attente/', ListeEnCours.as_view(), name = 'liste-en-cours')
  
     
 
