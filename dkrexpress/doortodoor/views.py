@@ -786,7 +786,7 @@ class ListeEnCours(LoginRequiredMixin,UserPassesTestMixin,View):
                     #Append ship data
                     ship['livraison_list'].append(ship_data)
 
-        ship['livraison_list'].sort(key=lambda item:item['date_ajout'], reverse=False)
+        ship['livraison_list'].sort(key=lambda item:item['date_ajout'], reverse=True)
         #Ajouter les données dans context
         context={
             'livraison': ship['livraison_list'],
