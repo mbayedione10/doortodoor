@@ -191,6 +191,7 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
             libelle = article.libelle
 
         # After everything is done, send confirmation mail to the user
+        """
         if settings.DEBUG == False:
             body = (f'Bonjour {client[0]},\n'
             f'Votre article a été livré avec succés par {request.user.username} \n'
@@ -206,6 +207,7 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
                 article_added_by,
                 fail_silently=False
             )
+         """
         return redirect('dashboard')
 
     def test_func(self):
