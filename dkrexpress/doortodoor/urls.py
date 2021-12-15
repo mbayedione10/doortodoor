@@ -11,8 +11,13 @@ urlpatterns = [
     path('article/', AjouterLivraison.as_view(), name = 'ajouter'),
     path('update/<int:pk>', UpdateArticle.as_view(), name='update'),
     path('livraison/<int:pk>', ModifierLivraison.as_view(), name='ajout-livraison'),
-    path('dashboard/', Dashboard.as_view(), name = 'dashboard'),
+
+    # path('dashboard/', DashboardJournalier.as_view(), name = 'dashboard-journalier'),
+    # path('dashboard/search', DashboardJournalier.as_view(), name = 'dashboard-journalier-search'),
+    path('dashboard/', DashboardSearch.as_view(), name = 'dashboard'),
     path('dashboard/search', DashboardSearch.as_view(), name = 'dashboard-search'),
+
+
     path('liste-retour/', ListeRetour.as_view(), name='liste-retour'),
     path('retour/search', ListeRetourSearch.as_view(), name = 'retour-search'),
     path('details/<int:pk>', LivraisonDetails.as_view(), name='livraison-details'),
