@@ -12,8 +12,8 @@ urlpatterns = [
     path('update/<int:pk>', UpdateArticle.as_view(), name='update'),
     path('livraison/<int:pk>', ModifierLivraison.as_view(), name='ajout-livraison'),
 
-    # path('dashboard/', DashboardJournalier.as_view(), name = 'dashboard-journalier'),
-    # path('dashboard/search', DashboardJournalier.as_view(), name = 'dashboard-journalier-search'),
+    path('dailyDashboard/', DashboardJournalier.as_view(), name = 'dashboard-journalier'),
+    path('dailyDashboard/search', DashboardJournalier.as_view(), name = 'dashboard-journalier-search'),
     path('dashboard/', DashboardSearch.as_view(), name = 'dashboard'),
     path('dashboard/search', DashboardSearch.as_view(), name = 'dashboard-search'),
 

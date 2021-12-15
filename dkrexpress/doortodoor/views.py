@@ -286,6 +286,101 @@ class ModifierStatut(LoginRequiredMixin, UserPassesTestMixin, View):
         return self.request.user.groups.all()
 
 
+class DashboardJournalier(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get(self, request, *args, **kwargs):
+        query = self.request.GET.get("q")
+        today = datetime.today()
+        
+        if query is None:
+            livraison = Livraison.objects.filter(created_on__year=today.year,
+            created_on__month=today.month, created_on__day=today.day)
+        else:
+            query_date_filter = datetime.strptime(query, "%Y-%m-%d")
+            livraison = Livraison.objects.filter(
+                Q(created_on__year=query_date_filter.year) &
+                Q(created_on__month=query_date_filter.month) &
+                Q(created_on__day=query_date_filter.day))
+                
+        ship = []
+        montant_article = 0
+        montant_recu = 0
+        nombre_livraison = 0
+        user_id= request.user.id
+
+        if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Employes'):
+            for liv in livraison:
+                montant_recu +=liv.prix_livraison
+                article_item = Article.objects.filter(article = liv)
+                for article in article_item:
+                    article_added_by = [user.username for user in User.objects.filter(article=article)]
+                    ship_data ={
+                                'id_article': article.id,
+                                'nom_client': article.nom_client,
+                                'contact_client': article.contact_client,
+                                'libelle_article': article.libelle,
+                                'adresse_client': article.adresse_client,
+                                'prix_art': article.prix_article,
+                                'prix_liv': article.montant_livraison,
+                                'montant': article.prix_article + article.montant_livraison,
+                                'article_added_by': article_added_by[0],
+                                'statut': liv.statut,
+                                'date_created': liv.created_on,
+                                'prix_livraison': liv.prix_livraison,
+                                'livraison_id': liv.pk
+                                }
+                    montant_article += ship_data['montant']
+                    #Append ship data
+                    ship.append(ship_data)
+                    if liv.statut == "livré":
+                        nombre_livraison += 1
+
+        elif request.user.groups.filter(name='Clients'):
+            if query is None:
+                article = Article.objects.filter(user = user_id, date_ajout__year=today.year,
+            date_ajout__month=today.month, date_ajout__day=today.day)
+            else:
+                article = Article.objects.filter(user = user_id, date_ajout__year=query_date_filter.year,
+            date_ajout__month=query_date_filter.month, date_ajout__day=query_date_filter.day)
+            for art in article:
+                livraison = Livraison.objects.filter(article=art)
+                for liv in livraison:
+                    montant_recu +=liv.prix_livraison
+                    article_item = Article.objects.filter(article = liv)
+                    article_added_by = [user.username for user in User.objects.filter(article=art)]
+                    ship_data ={
+                                'id_article': art.id,
+                                'nom_client': art.nom_client,
+                                'contact_client': art.contact_client,
+                                'libelle_article': art.libelle,
+                                'adresse_client': art.adresse_client,
+                                'montant': art.prix_article + art.montant_livraison,
+                                'article_added_by': article_added_by[0],
+                                'statut': liv.statut,
+                                'date_created': liv.created_on,
+                                'prix_livraison': liv.prix_livraison,
+                                'livraison_id': liv.pk
+                                }
+                    montant_article += ship_data['montant']
+                        #Append ship data
+                    ship.append(ship_data)                    
+                    if liv.statut == "livré":
+                        nombre_livraison += 1
+        
+        ship.sort(key=lambda item:item['date_created'], reverse=True)
+        #Ajouter les données dans context
+        context={
+            'livraison': ship,
+            'montant_recu': montant_recu,
+            'total_livraison': nombre_livraison,
+            'montant_articles': montant_article,
+        }
+        
+        return render(request,'doortodoor/dashboardJournalier.html', context)
+
+    def test_func(self):
+        return self.request.user.groups.all()
+
+
 class DashboardSearch(LoginRequiredMixin, UserPassesTestMixin, View):
     def get(self, request, *args, **kwargs):
         query = self.request.GET.get("q")

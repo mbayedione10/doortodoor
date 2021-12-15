@@ -1,0 +1,220 @@
+{% extends 'doortodoor/base.html' %}
+ 
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-3">
+        <div class="card col-md-4 mr-3">
+            <h4 class="text-center pt-2">Montant Recus</h4>
+            <h1 class="text-center" style="color:teal;">{{ montant_recu }} F CFA</h1>
+        </div>
+        {% if request.user.groups.all.0.name != "Livreurs" %}
+        <div class="card col-md-4 mr-3">
+            <h4 class="text-center pt-2">Article</h4>
+            <h1 class="text-center" style="color:teal;">{{ montant_articles }} F CFA</h1>
+        </div>
+        {% endif %}
+        <div class="card col-md-4 mr-3">
+            <h4 class="text-center pt-2">Nombre Livraison</h4>
+            <h1 class="text-center" style="color: red;">{{ total_livraison }}</h1>
+        </div>
+    </div> 
+    <div class="row  mt-3 justify-content-end">
+        <div class="col-md-3 col-sm-6">
+            <form method="GET" action="{% url 'dashboard-journalier-search' %}">
+                <div class="md-form mt-0 active-cyan-2">
+                    <input type="date"  min="2021-01-01" name="q" class="form-control" aria-label="Search" required value="{{ request.GET.q }}">
+                    <button type="submit" class="btn btn-dark" data-toggle="modal">
+                        Rechercher
+                    </button>
+                    <a href="{% url 'dashboard-journalier' %}">Retour</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <table class="table table-hover table-striped table-bordered " style="text-align: center;">
+                <thead>
+                    <tr>
+                        
+                        <th scope="col">Date</th>
+                        <th scope="col">Ajouté par</th>
+                        <th scope="col">Article</th>
+                        <th scope="col">Nom Client</th>                        
+                        <th scope="col">Adresse</th>
+                        <th scope="col">Contact</th>
+                        {% if request.user.groups.all.0.name == "Admin" %}
+                        <th scope="col">Prix Art</th>
+                        <th scope="col">Prix Liv</th>
+                        {% endif %}
+                        <th scope="col">Prix</th>
+                        <th scope="col">Encaissement</th>
+                        <th scope="col">Statut</th>
+                        <th colspan="3">Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ship in livraison %}
+                    {% if request.user.groups.all.0.name == "Livreurs" and ship.statut != "livré" %}
+                    <tr>
+                        <th scope="row">{{ ship.date_created }}</th>
+                        <td>{{ ship.article_added_by  }}</td>
+                        <td>{{ ship.libelle_article }}</td>
+                        <td>{{ ship.nom_client }}</td>
+                        <td>{{ ship.adresse_client }}</td>
+                        <td>{{ ship.contact_client }}</td>
+                        <td>{{ ship.montant }}</td>
+                        <td>{{ ship.prix_livraison }}</td>
+                        <td>
+                            {% if ship.statut == "livré"%}
+                            <i style="color: green;" class="fas fa-check"></i>
+                            {% elif ship.statut == "en cours" %}
+                            <i style="color: rgb(14, 13, 12);" class="fas fa-ellipsis-h"></i>
+                            {% elif ship.statut == "retour" %}
+                            <i style="color: red;" class="fas fa-times"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if request.user.groups.all.0.name == "Livreurs" %}
+                            <a href="{% url 'modifier-livraison' ship.livraison_id %}"><i class="fas fa-exchange-alt"></i></a>
+                            {% elif request.user.groups.all.0.name == "Clients" %}
+                            {% if ship.statut != "livré" %}
+                            <a href="{% url 'update' ship.id_article %}"><i class="far fa-edit"></i></a>
+                            {% else %}
+                            <a href="{% url 'livraison-details' ship.livraison_id %}"><i class="fas fa-list"></i></a>
+                            {% endif %}
+                            {% endif %}
+                        
+                            {% if request.user.groups.all.0.name == "Admin" %}
+                        
+                                {% if ship.statut != "livré" %}
+                                <a href="{% url 'update' ship.id_article %}"><i class="far fa-edit"></i></a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'modifier-livraison' ship.livraison_id %}"><i class="fas fa-exchange-alt"></i></a>
+                            </td>
+                            <td>
+                                {% if ship.statut == "livré" %}
+                                <a href="{% url 'livraison-details' ship.livraison_id %}"><i class="fas fa-list"></i></a>
+                                {% endif %}
+                            </td>
+                            {% endif %}
+                            
+                        
+                    </tr>
+                    {% elif request.user.groups.all.0.name != "Livreurs" %}
+                    <tr>
+                        <th scope="row">{{ ship.date_created  }}</th>
+                        <td>{{ ship.article_added_by  }}</td>
+                        <td>{{ ship.libelle_article }}</td>
+                        <td>{{ ship.nom_client }}</td>
+                        <td>{{ ship.adresse_client }}</td>
+                        <td>{{ ship.contact_client }}</td>
+                        {% if request.user.groups.all.0.name == "Admin" %}
+                        <td>{{ ship.prix_art }}</td>
+                        <td>{{ ship.prix_liv }}</td>
+                        {% endif %}
+                        <td>{{ ship.montant }}</td>
+                        <td>{{ ship.prix_livraison }}</td>
+                        <td>
+                            {% if request.user.groups.all.0.name != "Admin" %}
+                            {% if ship.statut == "livré"%}
+                            <i style="color: green;" class="fas fa-check"></i>
+                            {% elif ship.statut == "en cours" %}
+                            <i style="color: rgb(14, 13, 12);" class="fas fa-ellipsis-h"></i>
+                            {% elif ship.statut == "retour" %}
+                            <i style="color: red;" class="fas fa-times"></i>
+                            {% endif %}
+                            {% else %}
+                            {% if ship.statut == "livré"%}
+                            <a>Livré</a>
+                            {% elif ship.statut == "en cours" %}
+                            <a>En cours</a>
+                            {% elif ship.statut == "retour" %}
+                            <a>Retour</a>
+                            {% endif %}
+                            {% endif %}
+                        </td>
+                        {% if request.user.groups.all.0.name != "Employes" %}
+                        <td>
+                            {% if request.user.groups.all.0.name == "Livreurs" %}
+                            <a href="{% url 'modifier-livraison' ship.livraison_id %}"><i class="fas fa-exchange-alt"></i></a>
+                            {% elif request.user.groups.all.0.name == "Clients" %}
+                            {% if ship.statut != "livré" %}
+                            <a href="{% url 'update' ship.id_article %}"><i class="far fa-edit"></i></a>
+                            {% else %}
+                            <a href="{% url 'livraison-details' ship.livraison_id %}"><i class="fas fa-list"></i></a>
+                            {% endif %}
+                            {% endif %}
+                        
+                            {% if request.user.groups.all.0.name == "Admin" %}
+                        
+                                {% if ship.statut != "livré" %}
+                                <a href="{% url 'update' ship.id_article %}"><i class="far fa-edit"></i></a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'modifier-livraison' ship.livraison_id %}"><i class="fas fa-exchange-alt"></i></a>
+                            </td>
+                            <td>
+                                {% if ship.statut == "livré" %}
+                                <a href="{% url 'livraison-details' ship.livraison_id %}"><i class="fas fa-list"></i></a>
+                                {% endif %}
+                                {% endif %}
+                            </td>
+
+                            {% else %}
+                            <td>
+                                {% if ship.statut == "livré" %}
+                                <a href="{% url 'livraison-details' ship.livraison_id %}"><i class="fas fa-list"></i></a>
+                                {% endif %}
+                                
+                            </td>
+                            {% endif %}
+                            
+
+                        {% endif %}
+        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <button type="submit" class="btn btn-success"  onClick="window.print()">Imprimer
+        </button>
+        <button id="btnExport" type="submit" class="btn btn-light" onclick="exportReportToExcel(this)">Excel</button>
+    </div>
+</div>
+
+<script>
+function exportReportToExcel() {
+  let table = document.getElementsByTagName("table"); // you can use document.getElementById('tableId') as well by providing id to the table tag
+  let today = new Date().toISOString().slice(0, 10)
+  TableToExcel.convert(table[0], { // html code may contain multiple tables so here we are refering to 1st table tag
+    name: '{{ request.GET.q }}'+` rapport.xlsx`, // fileName you could use any name
+    sheet: {
+      name: 'Sheet 1' // sheetName
+    }
+  });
+}
+</script>
+
+
+<div class="row justify-content-center mt-5 ml-3">
+    <div class="col-md-3 col-sm-12 justify-content-center">
+        {% load static %}
+        <img src="{% static "doortodoor/logo.jpg" %}" class="rounded" width="300" height="250">
+    </div>
+    <div class="col-md-9 col-sm-12 mt-5">
+        <div class="card-body">
+            <h6 class="card-title">DKR EXPRESS / DOOR TO DOOR SERVICES</h6>
+            <p class="card-text"><small class="text-muted">Societe Unipersonnelle a Responsabilite Limitée au capital de 250 000 F CFA <br>
+                Siege Social: Cité Libasse Niang, Sud Foire Villa 2298, Dakar, Senegal <br>
+                RC SN-DKR-2019-B-36077</small></P>
+            
+          </div>
+    </div>
+</div> 
+
+{% endblock content %}
