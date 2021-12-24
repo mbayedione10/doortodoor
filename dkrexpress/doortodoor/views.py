@@ -11,7 +11,8 @@ from .forms import *
 
 
 class Index(LoginRequiredMixin,UserPassesTestMixin, View):
-    def get(self,request, *args, **kwargs):
+    @staticmethod
+    def get(request, *args, **kwargs):
         if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Clients'):
             return render(request,'doortodoor/index.html')
         return redirect('dashboard')
@@ -21,20 +22,23 @@ class Index(LoginRequiredMixin,UserPassesTestMixin, View):
 
 
 class About(View):
-    def get(self, request, *args, **kwargs):
+    @staticmethod
+    def get(request, *args, **kwargs):
         return render(request, 'doortodoor/about.html')
     
 
 
 
 class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
-    def get(self, request, *args, **kwargs):
+    @staticmethod
+    def get(request, *args, **kwargs):
         if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Clients'):
             form = ArticleForm()
             return render(request, 'doortodoor/ajouter.html', {'form': form})
         return redirect('dashboard')
 
-    def post(self, request, *args, **kwargs):
+    @staticmethod
+    def post(request, *args, **kwargs):
         """
         Formulaire qui permet d'ajouter des livraisons par le client
         user autorisé: admin, client
@@ -93,7 +97,8 @@ class UpdateArticle(LoginRequiredMixin, UserPassesTestMixin,View):
     user autorisé: admin, client
     """
 
-    def get(self, request, pk, *args, **kwargs):
+    @staticmethod
+    def get(request, pk, *args, **kwargs):
         article = Article.objects.get(pk=pk)
         livraison = Livraison.objects.filter(article=article)
         statut = ''
@@ -107,7 +112,8 @@ class UpdateArticle(LoginRequiredMixin, UserPassesTestMixin,View):
 
         return redirect('dashboard')
 
-    def post(self, request, pk, *args, **kwargs):
+    @staticmethod
+    def post(request, pk, *args, **kwargs):
         # fetch the object related to passed id
         article = Article.objects.get(pk=pk)
         form = ArticleForm(request.POST or None,instance = article)
@@ -151,7 +157,8 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
     user autorisé: admin, livreur
     """
 
-    def get(self, request,pk, *args, **kwargs):
+    @staticmethod
+    def get(request,pk, *args, **kwargs):
         if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Livreurs'):
             livraison = Livraison.objects.get(pk=pk)
 
@@ -166,7 +173,8 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
             return render(request, 'doortodoor/ajouter-livraison.html', context)
         return redirect('dashboard')
     
-    def post(self, request, pk, *args, **kwargs):
+    @staticmethod
+    def post(request, pk, *args, **kwargs):
         livraison = Livraison.objects.get(pk=pk)
         livraison.prix_livraison = request.POST.get('prix_livraison')
         livraison.statut = "livré"
@@ -185,7 +193,8 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
 
 
 class LivraisonDetails(LoginRequiredMixin, UserPassesTestMixin, View):
-    def get(self, request, pk, *args, **kwargs):
+    @staticmethod
+    def get(request, pk, *args, **kwargs):
         livraison = Livraison.objects.get(pk=pk)
         livraison_modified_by = [user.username for user in User.objects.filter(livraison=livraison)]
         liv = {
@@ -218,7 +227,8 @@ class ModifierStatut(LoginRequiredMixin, UserPassesTestMixin, View):
     user autorisé: admin, livreur
     """
 
-    def get(self, request, pk, *args, **kwargs):
+    @staticmethod
+    def get(request, pk, *args, **kwargs):
         liv = {
                 'livraison_list': []
             }
@@ -244,7 +254,8 @@ class ModifierStatut(LoginRequiredMixin, UserPassesTestMixin, View):
         return redirect('dashboard')
 
 
-    def post(self, request, pk, *args, **kwargs):
+    @staticmethod
+    def post(request, pk, *args, **kwargs):
         livraison = Livraison.objects.get(pk=pk)
         user_id= request.user.id
         list_id = []
@@ -459,7 +470,8 @@ class DashboardSearch(LoginRequiredMixin, UserPassesTestMixin, View):
 
 
 class ListeRetour(LoginRequiredMixin, UserPassesTestMixin, View):
-    def get(self, request, *args, **kwargs):
+    @staticmethod
+    def get(request, *args, **kwargs):
         """
         parcourir toutes les livraisons ajouter les elements au tableau de bord
         Calculer montant total
@@ -663,7 +675,8 @@ class ListeRetourSearch(LoginRequiredMixin, UserPassesTestMixin, View):
 
 
 class ListeEnCours(LoginRequiredMixin,UserPassesTestMixin,View):
-    def get(self, request, *args, **kargs):
+    @staticmethod
+    def get(request, *args, **kargs):
         """
         parcourir toutes les livraisons en cours ajouter les elements au tableau de bord
         Calculer montant total
