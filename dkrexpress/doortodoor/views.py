@@ -14,8 +14,7 @@ class Index(LoginRequiredMixin,UserPassesTestMixin, View):
     def get(self,request, *args, **kwargs):
         if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Clients'):
             return render(request,'doortodoor/index.html')
-        else:
-            return redirect('dashboard')
+        return redirect('dashboard')
     
     def test_func(self):
         return self.request.user.groups.all()
@@ -33,8 +32,7 @@ class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
         if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Clients'):
             form = ArticleForm()
             return render(request, 'doortodoor/ajouter.html', {'form': form})
-        else:
-            return redirect('dashboard')
+        return redirect('dashboard')
 
     def post(self, request, *args, **kwargs):
         """
@@ -166,8 +164,7 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
                 }
 
             return render(request, 'doortodoor/ajouter-livraison.html', context)
-        else:
-            return redirect('dashboard')
+        return redirect('dashboard')
     
     def post(self, request, pk, *args, **kwargs):
         livraison = Livraison.objects.get(pk=pk)
@@ -253,9 +250,7 @@ class ModifierStatut(LoginRequiredMixin, UserPassesTestMixin, View):
                 }
 
             return render(request, 'doortodoor/modifier-statut.html', context)
-
-        else:
-            return redirect('dashboard')
+        return redirect('dashboard')
 
 
     def post(self, request, pk, *args, **kwargs):
