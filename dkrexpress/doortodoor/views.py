@@ -71,11 +71,6 @@ class AjouterLivraison(LoginRequiredMixin,UserPassesTestMixin, View):
         livraison = Livraison.objects.create()
         livraison.article.add(*list_id_article)
         livraison.user.add(*list_id)
-
-
-        context = {
-                'id': article.pk,
-            }
         """
         si l'utilisateur save add another-> ajouter
         si l'utilisateur save -> dashboard
@@ -128,7 +123,6 @@ class UpdateArticle(LoginRequiredMixin, UserPassesTestMixin,View):
                 livraison = Livraison.objects.get(article=article)
                 livraison.statut = "en cours"
                 user_id= request.user.id
-                client = [user.username for user in User.objects.filter(livraison=livraison)]
                 list_id = []
                 list_id.append(user_id)
                 livraison.user.clear()
