@@ -3,11 +3,11 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.utils.timezone import datetime
-from doortodoor.models import *
+from doortodoor.models import Article, Livraison
 from django.db.models import Q
 from django.conf import settings
 from django.core.mail import send_mail
-from .forms import *
+from .forms import ArticleForm
 
 
 class Index(LoginRequiredMixin,UserPassesTestMixin, View):
