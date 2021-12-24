@@ -100,10 +100,9 @@ class UpdateArticle(LoginRequiredMixin, UserPassesTestMixin,View):
         for liv in livraison:
             
             statut = liv.statut
-        if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Clients'):
-            if statut != "livré":
-                form = ArticleForm(instance = article)
-                return render(request, 'doortodoor/update-article.html', {'form': form})
+        if (request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Clients')) and statut != "livré":
+            form = ArticleForm(instance = article)
+            return render(request, 'doortodoor/update-article.html', {'form': form})
 
         return redirect('dashboard')
 
