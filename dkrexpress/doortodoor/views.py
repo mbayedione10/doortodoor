@@ -171,7 +171,6 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
         livraison.prix_livraison = request.POST.get('prix_livraison')
         livraison.statut = "livré"
         user_id= request.user.id
-        client = ''
         list_id = []
         list_id.append(user_id)
         livraison.user.clear()
@@ -179,14 +178,6 @@ class ModifierLivraison(LoginRequiredMixin,UserPassesTestMixin,View):
         livraison.date_statut = datetime.now()
 
         livraison.save()
-        article_item = Article.objects.filter(article = livraison)
-        article_added_by=[]
-        libelle=''
-        for article in article_item:
-            client = [user.username for user in User.objects.filter(article=article)]
-            article_added_by = [user.email for user in User.objects.filter(article=article)]
-            libelle = article.libelle
-
         return redirect('dashboard')
 
     def test_func(self):
@@ -270,10 +261,6 @@ class ModifierStatut(LoginRequiredMixin, UserPassesTestMixin, View):
             livraison.statut = "en cours"
         livraison.date_statut = datetime.now()
         livraison.save()
-
-        context = {
-                'id': livraison.pk,
-            }
 
         return redirect('dashboard')
 
@@ -581,9 +568,6 @@ class ListeRetourSearch(LoginRequiredMixin, UserPassesTestMixin, View):
         user autorisé: admin | client | livreur
         """
         query = self.request.GET.get("q")
-        today = datetime.today()
-        query_date_filter = datetime.today()
-        query_date_filter = datetime.strptime(query, "%Y-%m")
         livraison = Livraison.objects.filter(Q(created_on__icontains=query),statut='retour')
         ship = {
             'livraison_list': []
