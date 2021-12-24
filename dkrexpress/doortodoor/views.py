@@ -124,7 +124,7 @@ class UpdateArticle(LoginRequiredMixin, UserPassesTestMixin,View):
                 article.date_ajout = datetime.now()
                 form.save()
                 article.save()
-    
+
                 livraison = Livraison.objects.get(article=article)
                 livraison.statut = "en cours"
                 user_id= request.user.id
@@ -293,7 +293,7 @@ class DashboardJournalier(LoginRequiredMixin, UserPassesTestMixin, View):
                 Q(created_on__year=query_date_filter.year) &
                 Q(created_on__month=query_date_filter.month) &
                 Q(created_on__day=query_date_filter.day))
-                
+            
         ship = []
         montant_article = 0
         montant_recu = 0
@@ -358,7 +358,7 @@ class DashboardJournalier(LoginRequiredMixin, UserPassesTestMixin, View):
                     ship.append(ship_data)                    
                     if liv.statut == "livré":
                         nombre_livraison += 1
-        
+
         ship.sort(key=lambda item:item['date_created'], reverse=True)
         #Ajouter les données dans context
         context={
@@ -453,7 +453,7 @@ class DashboardSearch(LoginRequiredMixin, UserPassesTestMixin, View):
                     ship.append(ship_data)                    
                     if liv.statut == "livré":
                         nombre_livraison += 1
-        
+
         ship.sort(key=lambda item:item['date_created'], reverse=True)
         #Ajouter les données dans context
         context={
