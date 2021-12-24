@@ -1,9 +1,8 @@
 from django.urls import path
-from django.conf.urls import url, include
-from django.contrib import admin
 from django.conf.urls.static import static
+from django.conf import settings
 #from customer.views import Index, About
-from doortodoor.views import *
+from doortodoor.views import Index, About, AjouterLivraison, UpdateArticle, ModifierLivraison, DashboardJournalier, DashboardSearch, ListeRetour, ListeRetourSearch, LivraisonDetails, ModifierStatut, ListeEnCours
 
 urlpatterns = [
     path('', Index.as_view(), name = 'index'),
