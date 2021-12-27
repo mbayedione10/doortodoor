@@ -57,7 +57,7 @@
                 </thead>
                 <tbody>
                     {% for ship in livraison %}
-                    {% if request.user.groups.all.0.name == "Livreurs" and ship.statut != "livré" %}
+                    {% if request.user.groups.all.0.name == "Livreurs" %}
                     <tr>
                         <th scope="row">{{ ship.date_created }}</th>
                         <td>{{ ship.article_added_by  }}</td>

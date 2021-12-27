@@ -281,34 +281,7 @@ class DashboardJournalier(LoginRequiredMixin, UserPassesTestMixin, View):
         nombre_livraison = 0
         user_id = request.user.id
 
-        if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Employes'):
-            for liv in livraison:
-                montant_recu += liv.prix_livraison
-                article_item = Article.objects.filter(article=liv)
-                for article in article_item:
-                    article_added_by = [user.username for user in User.objects.filter(article=article)]
-                    ship_data = {
-                        'id_article': article.id,
-                        'nom_client': article.nom_client,
-                        'contact_client': article.contact_client,
-                        'libelle_article': article.libelle,
-                        'adresse_client': article.adresse_client,
-                        'prix_art': article.prix_article,
-                        'prix_liv': article.montant_livraison,
-                        'montant': article.prix_article + article.montant_livraison,
-                        'article_added_by': article_added_by[0],
-                        'statut': liv.statut,
-                        'date_created': liv.created_on,
-                        'prix_livraison': liv.prix_livraison,
-                        'livraison_id': liv.pk
-                    }
-                    montant_article += ship_data['montant']
-                    # Append ship data
-                    ship.append(ship_data)
-                    if liv.statut == "livré":
-                        nombre_livraison += 1
-
-        elif request.user.groups.filter(name='Clients'):
+        if request.user.groups.filter(name='Clients'):
             if query is None:
                 article = Article.objects.filter(user=user_id, date_ajout__year=today.year,
                                                  date_ajout__month=today.month, date_ajout__day=today.day)
@@ -340,6 +313,41 @@ class DashboardJournalier(LoginRequiredMixin, UserPassesTestMixin, View):
                     ship.append(ship_data)
                     if liv.statut == "livré":
                         nombre_livraison += 1
+        else:
+            for liv in livraison:
+                article_item = Article.objects.filter(article=liv)
+                livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
+                if request.user.groups.filter(name='Livreurs') and livraison_modified_by[0]==request.user.username:
+                    montant_recu += liv.prix_livraison
+                    if liv.statut == "Livré":
+                        nombre_livraison +=1
+                else:
+                    montant_recu += liv.prix_livraison
+                    if liv.statut == "Livré":
+                        nombre_livraison +=1
+                for article in article_item:
+                    article_added_by = [user.username for user in User.objects.filter(article=article)]
+                    ship_data = {
+                        'id_article': article.id,
+                        'nom_client': article.nom_client,
+                        'contact_client': article.contact_client,
+                        'libelle_article': article.libelle,
+                        'adresse_client': article.adresse_client,
+                        'prix_art': article.prix_article,
+                        'prix_liv': article.montant_livraison,
+                        'montant': article.prix_article + article.montant_livraison,
+                        'article_added_by': article_added_by[0],
+                        'statut': liv.statut,
+                        'date_created': liv.created_on,
+                        'prix_livraison': liv.prix_livraison,
+                        'livraison_id': liv.pk
+                    }
+                    montant_article += ship_data['montant']
+                    # Append ship data
+                    ship.append(ship_data)
+                    if liv.statut == "livré":
+                        nombre_livraison += 1
+
 
         ship.sort(key=lambda item: item['date_created'], reverse=True)
         # Ajouter les données dans context
@@ -376,35 +384,7 @@ class DashboardSearch(LoginRequiredMixin, UserPassesTestMixin, View):
         nombre_livraison = 0
         user_id = request.user.id
 
-        if request.user.groups.filter(name='Admin') or request.user.groups.filter(name='Employes'):
-            for liv in livraison:
-
-                montant_recu += liv.prix_livraison
-                article_item = Article.objects.filter(article=liv)
-                for article in article_item:
-                    article_added_by = [user.username for user in User.objects.filter(article=article)]
-                    ship_data = {
-                        'id_article': article.id,
-                        'nom_client': article.nom_client,
-                        'contact_client': article.contact_client,
-                        'libelle_article': article.libelle,
-                        'adresse_client': article.adresse_client,
-                        'prix_art': article.prix_article,
-                        'prix_liv': article.montant_livraison,
-                        'montant': article.prix_article + article.montant_livraison,
-                        'article_added_by': article_added_by[0],
-                        'statut': liv.statut,
-                        'date_created': liv.created_on,
-                        'prix_livraison': liv.prix_livraison,
-                        'livraison_id': liv.pk
-                    }
-                    montant_article += ship_data['montant']
-                    # Append ship data
-                    ship.append(ship_data)
-                    if liv.statut == "livré":
-                        nombre_livraison += 1
-
-        elif request.user.groups.filter(name='Clients'):
+        if request.user.groups.filter(name='Clients'):
             if query is None:
                 article = Article.objects.filter(user=user_id, date_ajout__year=today.year,
                                                  date_ajout__month=today.month)
@@ -436,6 +416,61 @@ class DashboardSearch(LoginRequiredMixin, UserPassesTestMixin, View):
                     if liv.statut == "livré":
                         nombre_livraison += 1
 
+        if request.user.groups.filter(name="Admin") or request.user.groups.filter(name="Employes"):
+            for liv in livraison:
+                article_item = Article.objects.filter(article=liv)
+                montant_recu += liv.prix_livraison
+                if liv.statut == "Livré":
+                    nombre_livraison +=1
+                for article in article_item:
+                    article_added_by = [user.username for user in User.objects.filter(article=article)]
+                    ship_data = {
+                        'id_article': article.id,
+                        'nom_client': article.nom_client,
+                        'contact_client': article.contact_client,
+                        'libelle_article': article.libelle,
+                        'adresse_client': article.adresse_client,
+                        'prix_art': article.prix_article,
+                        'prix_liv': article.montant_livraison,
+                        'montant': article.prix_article + article.montant_livraison,
+                        'article_added_by': article_added_by[0],
+                        'statut': liv.statut,
+                        'date_created': liv.created_on,
+                        'prix_livraison': liv.prix_livraison,
+                        'livraison_id': liv.pk
+                    }
+                    montant_article += ship_data['montant']
+                    # Append ship data
+                    ship.append(ship_data)
+        if request.user.groups.filter(name='Livreurs'):
+            if query is None:
+                livraison = Livraison.objects.filter(created_on__month=today.month, user=user_id, statut='livré')
+            else:
+                livraison = Livraison.objects.filter(Q(created_on__icontains=query), user=user_id, statut='livré')
+            for liv in livraison:
+                montant_recu += liv.prix_livraison
+                nombre_livraison +=1
+                article_item = Article.objects.filter(article=liv)
+                for article in article_item:
+                    article_added_by = [user.username for user in User.objects.filter(article=article)]
+                    ship_data = {
+                        'id_article': article.id,
+                        'nom_client': article.nom_client,
+                        'contact_client': article.contact_client,
+                        'libelle_article': article.libelle,
+                        'adresse_client': article.adresse_client,
+                        'prix_art': article.prix_article,
+                        'prix_liv': article.montant_livraison,
+                        'montant': article.prix_article + article.montant_livraison,
+                        'article_added_by': article_added_by[0],
+                        'statut': liv.statut,
+                        'date_created': liv.created_on,
+                        'prix_livraison': liv.prix_livraison,
+                        'livraison_id': liv.pk
+                    }
+                    montant_article += ship_data['montant']
+                    # Append ship data
+                    ship.append(ship_data)
         ship.sort(key=lambda item: item['date_created'], reverse=True)
         # Ajouter les données dans context
         context = {
@@ -493,7 +528,10 @@ class ListeRetourSearch(LoginRequiredMixin, UserPassesTestMixin, View):
         elif request.user.groups.filter(name='Clients'):
             article = Article.objects.filter(user=user_id)
             for art in article:
-                livraison = Livraison.objects.filter(Q(created_on__icontains=query), article=art, statut='retour')
+                if query is None:
+                    livraison = Livraison.objects.filter(created_on__month=today.month, article=art, statut='retour')
+                else:
+                    livraison = Livraison.objects.filter(Q(created_on__icontains=query), article=art, statut='retour')
                 for liv in livraison:
                     livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
                     article_item = Article.objects.filter(article=liv)
@@ -514,7 +552,10 @@ class ListeRetourSearch(LoginRequiredMixin, UserPassesTestMixin, View):
                     nombre_livraison += 1
 
         elif request.user.groups.filter(name='Livreurs'):
-            livraison = Livraison.objects.filter(Q(created_on__icontains=query), user=user_id, statut='retour')
+            if query is None:
+                livraison = Livraison.objects.filter(created_on__month=today.month, user=user_id, statut='retour')
+            else:
+                livraison = Livraison.objects.filter(Q(created_on__icontains=query), user=user_id, statut='retour')
             for liv in livraison:
                 livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
                 article_item = Article.objects.filter(article=liv)
