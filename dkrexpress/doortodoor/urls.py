@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 #from customer.views import Index, About
-from doortodoor.views import Index, About, AjouterLivraison, UpdateArticle, ModifierLivraison, DashboardJournalier, DashboardSearch, ListeRetour, ListeRetourSearch, LivraisonDetails, ModifierStatut, ListeEnCours
+from doortodoor.views import Index, About, AjouterLivraison, UpdateArticle, ModifierLivraison, DashboardJournalier, DashboardSearch, ListeRetourSearch, LivraisonDetails, ModifierStatut, ListeEnCours
 
 urlpatterns = [
     path('', Index.as_view(), name = 'index'),
@@ -17,7 +17,7 @@ urlpatterns = [
     path('dashboard/search', DashboardSearch.as_view(), name = 'dashboard-search'),
 
 
-    path('liste-retour/', ListeRetour.as_view(), name='liste-retour'),
+    path('liste-retour/', ListeRetourSearch.as_view(), name='liste-retour'),
     path('retour/search', ListeRetourSearch.as_view(), name = 'retour-search'),
     path('details/<int:pk>', LivraisonDetails.as_view(), name='livraison-details'),
     path('modifier/<int:pk>', ModifierStatut.as_view(), name='modifier-livraison'),
