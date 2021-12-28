@@ -313,18 +313,19 @@ class DashboardJournalier(LoginRequiredMixin, UserPassesTestMixin, View):
                     ship.append(ship_data)
                     if liv.statut == "livré":
                         nombre_livraison += 1
+
         else:
             for liv in livraison:
-                article_item = Article.objects.filter(article=liv)
                 livraison_modified_by = [user.username for user in User.objects.filter(livraison=liv)]
-                if livraison_modified_by[0] == request.user.username:
-                    montant_recu += liv.prix_livraison
-                    if liv.statut == "livré":
-                        nombre_livraison +=1
+                if request.user.groups.filter(name='Livreurs'):
+                    if livraison_modified_by[0] == request.user.username and liv.statut == "livré":
+                            montant_recu +=liv.prix_livraison
+                            nombre_livraison +=1
                 else:
-                    montant_recu += liv.prix_livraison
                     if liv.statut == "livré":
-                        nombre_livraison +=1
+                        montant_recu += liv.prix_livraison
+                        nombre_livraison += 1
+                article_item = Article.objects.filter(article=liv)
                 for article in article_item:
                     article_added_by = [user.username for user in User.objects.filter(article=article)]
                     ship_data = {
@@ -345,7 +346,6 @@ class DashboardJournalier(LoginRequiredMixin, UserPassesTestMixin, View):
                     montant_article += ship_data['montant']
                     # Append ship data
                     ship.append(ship_data)
-
         ship.sort(key=lambda item: item['date_created'], reverse=True)
         # Ajouter les données dans context
         context = {
