@@ -596,7 +596,7 @@ class ListeEnCours(LoginRequiredMixin, UserPassesTestMixin, View):
         livraison = Livraison.objects.filter(statut='en cours')
         ship = []
         montant_article = 0
-        # montant_recu = 0
+        nombre_livraison = 0
         user_id = request.user.id
 
         if request.user.groups.filter(name='Clients'):
@@ -620,6 +620,7 @@ class ListeEnCours(LoginRequiredMixin, UserPassesTestMixin, View):
                         'livraison_id': liv.pk
                     }
                     montant_article += ship_data['montant']
+                    nombre_livraison += 1
                     # Append ship data
                     ship.append(ship_data)
         else:
@@ -643,14 +644,16 @@ class ListeEnCours(LoginRequiredMixin, UserPassesTestMixin, View):
                         'livraison_id': liv.pk
                     }
                     montant_article += ship_data['montant']
+                    nombre_livraison += 1
                     ship.append(ship_data)
         ship.sort(key=lambda item: item['date_created'], reverse=True)
         # Ajouter les données dans context
         context = {
             'livraison': ship,
             'montant_articles': montant_article,
+            'total_livraison': nombre_livraison,
         }
-        return render(request, 'doortodoor/dahboardEnCours.html', context)
+        return render(request, 'doortodoor/dashboardEnCours.html', context)
 
     def test_func(self):
         return self.request.user.groups.all()
